@@ -16,6 +16,6 @@ use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
 
-  //  return DB::table('users')->get();
-    return view('welcome');
+  return DB::table('users')->get();
+ //      return view('welcome');
 });
