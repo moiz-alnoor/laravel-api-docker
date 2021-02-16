@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,10 +12,25 @@ use Illuminate\Support\Facades\DB;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
+
+Route::get('/get', function () {
+  $data = DB::table('student')->first();
+          return response()->json($data->id);
+});
+
 
 Route::get('/', function () {
+  return view('auth.register');
+})->name('register');
 
-  return DB::table('users')->get();
- //      return view('welcome');
-});
+Route::get('/verify', function () {
+  return view('auth.verify');
+})->name('verify');
+
+Route::get('/home', function () {
+  return view('home');
+})->name('home');
+
+Route::post('/register', 'AuthController@create')->name('register');
+Route::post('/verify', 'AuthController@verify')->name('verify');
