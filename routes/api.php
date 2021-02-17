@@ -14,7 +14,9 @@ use App\Http\Controllers\SubjectController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
 
 // otp auth
@@ -22,13 +24,16 @@ Route::post('/register', [AuthController::class, 'create']);
 Route::post('/verify',   [AuthController::class, 'verify']);
 // end otp auth
 
-Route::post('subjects',[SubjectController::class, 'create']);
-Route::get('subjects',[SubjectController::class, 'readAll']);
-Route::get('subjects/{id}',[SubjectController::class, 'readOne']);
-Route::put('subjects/{id}',[SubjectController::class, 'update']);
-Route::delete('subjects/{id}',[SubjectController::class, 'delete']);
+// subject
+Route::post('/subjects',[SubjectController::class, 'create']);
+Route::get('/subjects',[SubjectController::class, 'readAll']);
+Route::get('/subjects/{id}',[SubjectController::class, 'readOne']);
+Route::put('/subjects/{id}',[SubjectController::class, 'update']);
+Route::delete('/subjects/{id}',[SubjectController::class, 'delete']);
+// end subject
 
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::put('/user', function () {
+    return 'User';
 });
+
+
