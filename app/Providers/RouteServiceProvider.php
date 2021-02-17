@@ -18,7 +18,11 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     public const HOME = '/home';
-    protected $namespace ='App\Http\Controllers';
+    
+    /**
+     *  v 7 route style.
+     */
+    // protected $namespace ='App\Http\Controllers';
 
     /**
      * The controller namespace for the application.

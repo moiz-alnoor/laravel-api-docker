@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,13 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/get', function () {
-  $data = DB::table('student')->first();
-          return response()->json($data->id);
-});
+// otp auth
+Route::get('/home', function () {
+  return view('home');
+})->name('home');
 
-
-Route::get('/', function () {
+Route::get('/register', function () {
   return view('auth.register');
 })->name('register');
 
@@ -28,9 +28,11 @@ Route::get('/verify', function () {
   return view('auth.verify');
 })->name('verify');
 
-Route::get('/home', function () {
-  return view('home');
-})->name('home');
+Route::get('/get', function () {
+$data = DB::table('student')->first();
+  return response()->json($data->id);
+});
 
-Route::post('/register', 'AuthController@create')->name('register');
-Route::post('/verify', 'AuthController@verify')->name('verify');
+Route::post('/register', [AuthController::class, 'create']);
+Route::post('/verify',   [AuthController::class, 'verify']);
+// end otp auth
