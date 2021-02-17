@@ -13,12 +13,13 @@ class SubjectController extends Controller
         return response()->json($subject, 201);
     }
     
-    public function readAll(){
+    public function read(){
         $subject = Subject::all();
         return response()->json($subject);
     }
 
     public function readOne(Request $request, $id){
+        return 1;
         $subject = Subject::find($id);
         return response()->json($subject);
     }

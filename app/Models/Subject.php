@@ -10,4 +10,5 @@ class Subject extends Model
     use HasFactory;
     protected $table = 'subject';
     public $timestamps = false;
+    protected $primaryKey = 'id';
 }
