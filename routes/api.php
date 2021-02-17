@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SubjectController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,6 +22,11 @@ Route::post('/register', [AuthController::class, 'create']);
 Route::post('/verify',   [AuthController::class, 'verify']);
 // end otp auth
 
+Route::post('subjects',[SubjectController::class, 'create']);
+Route::get('subjects',[SubjectController::class, 'readAll']);
+Route::get('subjects/{id}',[SubjectController::class, 'readOne']);
+Route::put('subjects/{id}',[SubjectController::class, 'update']);
+Route::delete('subjects/{id}',[SubjectController::class, 'delete']);
 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
