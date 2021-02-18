@@ -27,13 +27,11 @@ class TeacherController extends Controller
     }
 
     public function charge(Request $request){
-        
-       // setlocale(LC_MONETARY, 'en_US');
         $teacher = new Charge();
         $teacher->teacher_phone_number = $request->teacher_phone_number;
-        $teacher->amount = number_format($request->amount,2);
+        $teacher->amount = $request->amount;
         $teacher->save();
-        return response()->json($teacher, 201);
-    }
-
+        return response()->json($teacher, 201); 
 }
+}
+
