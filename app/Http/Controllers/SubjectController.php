@@ -19,7 +19,6 @@ class SubjectController extends Controller
     }
 
     public function readOne(Request $request, $id){
-        return 1;
         $subject = Subject::find($id);
         return response()->json($subject);
     }
@@ -28,6 +27,7 @@ class SubjectController extends Controller
         $subject = Subject::find($id);
         $subject->subject = $request->subject;
         $subject->save();
+        return response()->json($subject, 200);
     }
 
     public function delete(Request $request, $id){

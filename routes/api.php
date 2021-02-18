@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +16,10 @@ use App\Http\Controllers\SubjectController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
 
 
 // otp auth
@@ -24,17 +30,14 @@ Route::post('/verify',   [AuthController::class, 'verify']);
 // subject
 Route::post('/subjects',[SubjectController::class, 'create']);
 Route::get('/subjects',[SubjectController::class, 'read']);
-Route::get('subject/{$id}',[SubjectController::class, 'readOne']);
+Route::get('/subjects/{id}',[SubjectController::class, 'readOne']);
 Route::put('/subjects/{id}',[SubjectController::class, 'update']);
 Route::delete('/subjects/{id}',[SubjectController::class, 'delete']);
 // end subject
 
-Route::put('/user', function () {
-    return 'User';
-});
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
+// teacher
+Route::post('/teachers_date_availability',[TeacherController::class, 'dateAvailability']);
+Route::post('/teachers_time_availability',[TeacherController::class, 'timeAvailability']);
+Route::post('/charge',[TeacherController::class, 'charge']);
+// end teacher
 
