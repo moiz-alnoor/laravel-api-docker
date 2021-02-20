@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
-
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,11 +21,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-
+// user
 // otp auth
 Route::post('/register', [AuthController::class, 'create']);
 Route::post('/verify',   [AuthController::class, 'verify']);
 // end otp auth
+
+Route::put('/user_type', [UserController::class, 'userType']);
+// end user
 
 // subject
 Route::post('/subjects',[SubjectController::class, 'create']);
@@ -33,11 +36,15 @@ Route::get('/subjects',[SubjectController::class, 'read']);
 Route::get('/subjects/{id}',[SubjectController::class, 'readOne']);
 Route::put('/subjects/{id}',[SubjectController::class, 'update']);
 Route::delete('/subjects/{id}',[SubjectController::class, 'delete']);
+
+Route::post('/teacher_subject', [SubjectController::class, 'teacherSubject']);
 // end subject
 
 // teacher
 Route::post('/teachers_date_availability',[TeacherController::class, 'dateAvailability']);
 Route::post('/teachers_time_availability',[TeacherController::class, 'timeAvailability']);
 Route::post('/charge',[TeacherController::class, 'charge']);
+
+Route::get('/teacher_profile',[TeacherController::class, 'TeacherProfile']);
 // end teacher
 

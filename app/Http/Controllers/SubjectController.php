@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Subject;
+use App\Models\TeacherSubject;
 
 class SubjectController extends Controller
 {
@@ -10,16 +11,19 @@ class SubjectController extends Controller
         $subject = new Subject();
         $subject->subject = $request->subject;
         $subject->save();
+        if($subject)
         return response()->json($subject, 201);
     }
     
     public function read(){
         $subject = Subject::all();
+        if($subject)
         return response()->json($subject);
     }
 
     public function readOne(Request $request, $id){
         $subject = Subject::find($id);
+        if($subject)
         return response()->json($subject);
     }
 
@@ -27,11 +31,22 @@ class SubjectController extends Controller
         $subject = Subject::find($id);
         $subject->subject = $request->subject;
         $subject->save();
+        if($subject)
         return response()->json($subject, 200);
     }
 
     public function delete(Request $request, $id){
-        Subject::destroy($id);
+        $subject = Subject::destroy($id);
+        if($subject)
         return response()->json(null, 204);
+    }
+    public function teacherSubject(Request $request){
+        $subject = new TeacherSubject();
+        $subject->user_phone_number = $request->user_phone_number;
+        $subject->subject_id = $request->subject_id;
+        $subject->grade_id = $request->grade_id;
+        $subject->save();
+        if($subject)
+        return response()->json($subject, 201); 
     }
 }

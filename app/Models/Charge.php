@@ -10,11 +10,9 @@ class Charge extends Model
     use HasFactory;
     protected $table = 'charging_hours';
     public $timestamps = false;
-    //protected $primaryKey = 'id';
+    protected $primaryKey = 'id';
     protected $fillable = [
-        'id',
-        'teacher_phone_number',
-        'amount'
+        'id', 'user_phone_number', 'amount'
     ];
 }
 
