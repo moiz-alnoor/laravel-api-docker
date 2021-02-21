@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\StudyClassController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -44,7 +46,13 @@ Route::post('/teacher_subject', [SubjectController::class, 'teacherSubject']);
 Route::post('/teachers_date_availability',[TeacherController::class, 'dateAvailability']);
 Route::post('/teachers_time_availability',[TeacherController::class, 'timeAvailability']);
 Route::post('/charge',[TeacherController::class, 'charge']);
-
-Route::get('/teacher_profile',[TeacherController::class, 'TeacherProfile']);
+Route::get('/teacher_profile',[TeacherController::class, 'profile']);
 // end teacher
+
+// class
+Route::post('/class_location',[StudyClassController::class, 'location']);
+Route::post('/class_time',[StudyClassController::class, 'time']);
+Route::post('/create_class',[StudyClassController::class, 'create']);
+Route::get('/class/{user_phone_number}',[TeacherController::class, 'teacherClassList']);
+//end class
 
