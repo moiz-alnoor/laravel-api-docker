@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\TeacherTimeAvailability;
 use App\Models\TeacherDateAvailability;
 use App\Models\CreateClass;
+use App\Models\BookedClass;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
@@ -59,11 +60,23 @@ class TeacherController extends Controller
         ->join('teacher_subject', 'teacher_subject.id', '=', 'create_class.teacher_subject_id')
         ->join('subject', 'subject.id', '=', 'teacher_subject.subject_id')
         ->join('grade', 'grade.id', '=', 'teacher_subject.grade_id')
-        ->where('teacher_subject.user_phone_number' , $user_phone_number)
+        ->where('create_class.user_phone_number' , $user_phone_number)
         ->get();
         if($class)
         return response()->json($class); 
     }
+
+    
+    public function teacherStudent(Request $request, $user_phone_number){
+        //getting teacher classes based on status
+        $class = BookedClass::join('user', 'user.phone_number', '=', 'booked_class.user_phone_number')
+        ->join('create_class', 'create_class.id', '=', 'booked_class.create_class_id')
+        ->where('create_class.user_phone_number' , $user_phone_number)
+        ->get(['user.*']);
+        if($class)
+        return response()->json($class); 
+    }
+    
   
 }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StudyClassController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,8 @@ use App\Http\Controllers\StudyClassController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -38,7 +41,6 @@ Route::get('/subjects',[SubjectController::class, 'read']);
 Route::get('/subjects/{id}',[SubjectController::class, 'readOne']);
 Route::put('/subjects/{id}',[SubjectController::class, 'update']);
 Route::delete('/subjects/{id}',[SubjectController::class, 'delete']);
-
 Route::post('/teacher_subject', [SubjectController::class, 'teacherSubject']);
 // end subject
 
@@ -47,12 +49,15 @@ Route::post('/teachers_date_availability',[TeacherController::class, 'dateAvaila
 Route::post('/teachers_time_availability',[TeacherController::class, 'timeAvailability']);
 Route::post('/charge',[TeacherController::class, 'charge']);
 Route::get('/teacher_profile',[TeacherController::class, 'profile']);
+Route::get('/class/{user_phone_number}',[TeacherController::class, 'teacherClassList']);
+Route::get('/student/{user_phone_number}',[TeacherController::class, 'teacherStudent']);
 // end teacher
 
 // class
+Route::get('/up_comminng_class',[StudyClassController::class, 'upComingClass']);
+Route::get('/past_class',[StudyClassController::class, 'pastClass']);
+Route::get('/oneClass/{id}',[StudyClassController::class, 'oneClass']);
 Route::post('/class_location',[StudyClassController::class, 'location']);
 Route::post('/class_time',[StudyClassController::class, 'time']);
 Route::post('/create_class',[StudyClassController::class, 'create']);
-Route::get('/class/{user_phone_number}',[TeacherController::class, 'teacherClassList']);
 //end class
-
