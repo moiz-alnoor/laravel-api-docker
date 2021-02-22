@@ -7,7 +7,7 @@ use App\Models\Teacher;
 use Illuminate\Support\Facades\DB;
 use App\Models\TeacherTimeAvailability;
 use App\Models\TeacherDateAvailability;
-use App\Models\CreateClass;
+use App\Models\TeacherLocationAvailability;
 use App\Models\BookedClass;
 use Illuminate\Http\Request;
 
@@ -34,6 +34,17 @@ class TeacherController extends Controller
         return response()->json($teacher, 201);
     }
 
+    public function locationAvailability(Request $request){
+        //set date available
+        $loaction = new TeacherLocationAvailability();
+        $loaction->user_phone_number = $request->date;
+        $loaction->longitude = $request->longitude;
+        $loaction->latitude = $request->latitude;
+        $loaction->save();
+        if($loaction)
+        return response()->json($loaction, 201);
+    }
+
     public function charge(Request $request){
         //teacher charge per hour
         $teacher = new Charge();
@@ -48,30 +59,19 @@ class TeacherController extends Controller
         //getting teacher profile
         $teacherProfile = Teacher::join('rating', 'rating.user_phone_number', '=', 'user.phone_number')
         ->join('charging_hours', 'charging_hours.user_phone_number', '=', 'rating.user_phone_number')
+        ->where('user.user_type_id' , 1)
         ->get(['user.*', 'charging_hours.amount', 'rating.rating']);
         if($teacherProfile)
         return response()->json($teacherProfile); 
     }
 
-    public function teacherClassList(Request $request, $user_phone_number){
-        //getting teacher classes based on status
-        $class = CreateClass::join('class_location', 'class_location.id', '=', 'create_class.class_location_id')
-        ->join('class_time', 'class_time.id', '=', 'create_class.class_time_id')
-        ->join('teacher_subject', 'teacher_subject.id', '=', 'create_class.teacher_subject_id')
-        ->join('subject', 'subject.id', '=', 'teacher_subject.subject_id')
-        ->join('grade', 'grade.id', '=', 'teacher_subject.grade_id')
-        ->where('create_class.user_phone_number' , $user_phone_number)
-        ->get();
-        if($class)
-        return response()->json($class); 
-    }
-
+ 
     
     public function teacherStudent(Request $request, $user_phone_number){
         //getting teacher classes based on status
+       //return $user_phone_number;
         $class = BookedClass::join('user', 'user.phone_number', '=', 'booked_class.user_phone_number')
-        ->join('create_class', 'create_class.id', '=', 'booked_class.create_class_id')
-        ->where('create_class.user_phone_number' , $user_phone_number)
+        ->where('booked_class.user_phone_number' , $user_phone_number)
         ->get(['user.*']);
         if($class)
         return response()->json($class); 

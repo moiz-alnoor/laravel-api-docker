@@ -7,7 +7,7 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StudyClassController;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\GradeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,28 +36,32 @@ Route::put('/user_type', [UserController::class, 'userType']);
 // end user
 
 // subject
-Route::post('/subjects',[SubjectController::class, 'create']);
-Route::get('/subjects',[SubjectController::class, 'read']);
-Route::get('/subjects/{id}',[SubjectController::class, 'readOne']);
-Route::put('/subjects/{id}',[SubjectController::class, 'update']);
-Route::delete('/subjects/{id}',[SubjectController::class, 'delete']);
+Route::post('/subject',[SubjectController::class, 'create']);
+Route::get('/subject',[SubjectController::class, 'read']);
+Route::get('/subject/{id}',[SubjectController::class, 'readOne']);
+Route::put('/subject/{id}',[SubjectController::class, 'update']);
+Route::delete('/subject/{id}',[SubjectController::class, 'delete']);
 Route::post('/teacher_subject', [SubjectController::class, 'teacherSubject']);
 // end subject
 
 // teacher
-Route::post('/teachers_date_availability',[TeacherController::class, 'dateAvailability']);
-Route::post('/teachers_time_availability',[TeacherController::class, 'timeAvailability']);
+Route::post('/teacher_date_availability',[TeacherController::class, 'dateAvailability']);
+Route::post('/teacher_time_availability',[TeacherController::class, 'timeAvailability']);
+Route::post('/teacher_location_availability',[TeacherController::class, 'locationAvailability']);
 Route::post('/charge',[TeacherController::class, 'charge']);
 Route::get('/teacher_profile',[TeacherController::class, 'profile']);
-Route::get('/class/{user_phone_number}',[TeacherController::class, 'teacherClassList']);
-Route::get('/student/{user_phone_number}',[TeacherController::class, 'teacherStudent']);
+Route::get('/teacher_student/{user_phone_number}',[TeacherController::class, 'teacherStudent']);
 // end teacher
 
-// class
-Route::get('/up_comminng_class',[StudyClassController::class, 'upComingClass']);
+//class 
 Route::get('/past_class',[StudyClassController::class, 'pastClass']);
+//!?
+Route::get('/up_comminng_class',[StudyClassController::class, 'upComingClass']);
 Route::get('/oneClass/{id}',[StudyClassController::class, 'oneClass']);
-Route::post('/class_location',[StudyClassController::class, 'location']);
-Route::post('/class_time',[StudyClassController::class, 'time']);
 Route::post('/create_class',[StudyClassController::class, 'create']);
 //end class
+
+
+//garde
+Route::get('/grade',[GradeController::class, 'read']);
+//end grade
