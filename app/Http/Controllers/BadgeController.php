@@ -8,11 +8,11 @@ use App\Models\Badge;
 class BadgeController extends Controller
 {
     public function create(Request $request){
-        $subject = new Badge();
-        $subject->subject = $request->subject;
-        $subject->save();
-        if($subject)
-        return response()->json($subject, 201);
+        $badge = new Badge();
+        $badge->badge = $request->badge;
+        $badge->save();
+        if($badge)
+        return response()->json($badge, 201);
     }
     
     public function read(){

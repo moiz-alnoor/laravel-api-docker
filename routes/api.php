@@ -8,6 +8,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StudyClassController;
 use App\Http\Controllers\GradeController;
+use App\Http\Controllers\BadgeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,3 +66,9 @@ Route::post('/create_class',[StudyClassController::class, 'create']);
 //garde
 Route::get('/grade',[GradeController::class, 'read']);
 //end grade
+
+
+//badge
+Route::get('/badge',[BadgeController::class, 'read']);
+Route::post('/badge',[BadgeController::class, 'create']);
+//end badge
