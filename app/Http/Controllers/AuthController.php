@@ -13,7 +13,7 @@ class AuthController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'phone_number' => ['required', 'numeric', 'unique:users'],
+            'phone_number' => ['required', 'numeric', 'unique:user'],
         ]);
         /* Get credentials from .env */
         $token = getenv("TWILIO_AUTH_TOKEN");

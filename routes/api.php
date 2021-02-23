@@ -46,7 +46,6 @@ Route::post('/select_subject', [SubjectController::class, 'selectSubject']);
 // end subject
 
 // teacher
-Route::post('/date_availability',[TeacherController::class, 'dateAvailability']);
 Route::post('/time_availability',[TeacherController::class, 'timeAvailability']);
 Route::post('/location_availability',[TeacherController::class, 'locationAvailability']);
 Route::post('/charge',[TeacherController::class, 'charge']);
@@ -56,10 +55,8 @@ Route::get('/teacher_student/{user_phone_number}',[TeacherController::class, 'te
 
 //class 
 Route::get('/past_class',[StudyClassController::class, 'pastClass']);
-//!?
-Route::get('/up_comminng_class',[StudyClassController::class, 'upComingClass']);
+Route::get('/up_comming_class',[StudyClassController::class, 'upComingClass']);
 Route::get('/oneClass/{id}',[StudyClassController::class, 'oneClass']);
-Route::post('/create_class',[StudyClassController::class, 'create']);
 //end class
 
 

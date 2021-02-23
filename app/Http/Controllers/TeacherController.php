@@ -19,21 +19,13 @@ class TeacherController extends Controller
         $teacher = new TeacherTimeAvailability();
         $teacher->from = $request->from;
         $teacher->to = $request->to;
-        $teacher->user_phone_number = '+'.$request->user_phone_number;
-        $teacher->save();
-        if($teacher)
-        return response()->json($teacher, 201);
-    }
-    
-    public function dateAvailability(Request $request){
-        //set date available
-        $teacher = new TeacherDateAvailability();
         $teacher->date = $request->date;
         $teacher->user_phone_number = '+'.$request->user_phone_number;
         $teacher->save();
         if($teacher)
         return response()->json($teacher, 201);
     }
+    
 
     public function locationAvailability(Request $request){
         //set date available
