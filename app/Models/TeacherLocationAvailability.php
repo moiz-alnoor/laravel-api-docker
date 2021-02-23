@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TeacherLocationAvailability extends Model
 {
-    protected $table = 'class_location';
+    protected $table = 'teacher_location_availability';
     public $timestamps = false;
     protected $primaryKey = 'id';
     protected $fillable = [

@@ -13,12 +13,12 @@ use Illuminate\Http\Request;
 
 class TeacherController extends Controller
 {
-    public function timeAvailability(Request $request){
+    public function     timeAvailability(Request $request){
         //set time available
         $teacher = new TeacherTimeAvailability();
         $teacher->from = $request->from;
         $teacher->to = $request->to;
-        $teacher->user_phone_number = $request->teacher_phone_number;
+        $teacher->user_phone_number = '+'.$request->user_phone_number;
         $teacher->save();
         if($teacher)
         return response()->json($teacher, 201);
@@ -28,7 +28,7 @@ class TeacherController extends Controller
         //set date available
         $teacher = new TeacherDateAvailability();
         $teacher->date = $request->date;
-        $teacher->user_phone_number = $request->teacher_phone_number;
+        $teacher->user_phone_number = '+'.$request->user_phone_number;
         $teacher->save();
         if($teacher)
         return response()->json($teacher, 201);
@@ -37,7 +37,7 @@ class TeacherController extends Controller
     public function locationAvailability(Request $request){
         //set date available
         $loaction = new TeacherLocationAvailability();
-        $loaction->user_phone_number = $request->date;
+        $loaction->user_phone_number = '+'.$request->user_phone_number;
         $loaction->longitude = $request->longitude;
         $loaction->latitude = $request->latitude;
         $loaction->save();
@@ -48,7 +48,7 @@ class TeacherController extends Controller
     public function charge(Request $request){
         //teacher charge per hour
         $teacher = new Charge();
-        $teacher->user_phone_number = $request->teacher_phone_number;
+        $teacher->user_phone_number = '+'.$request->user_phone_number;
         $teacher->amount = $request->amount;
         $teacher->save();
         if($teacher)
@@ -69,7 +69,7 @@ class TeacherController extends Controller
     
     public function teacherStudent(Request $request, $user_phone_number){
         //getting teacher classes based on status
-       //return $user_phone_number;
+        //return $user_phone_number;
         $class = BookedClass::join('user', 'user.phone_number', '=', 'booked_class.user_phone_number')
         ->where('booked_class.user_phone_number' , $user_phone_number)
         ->get(['user.*']);

@@ -41,13 +41,13 @@ Route::get('/subject',[SubjectController::class, 'read']);
 Route::get('/subject/{id}',[SubjectController::class, 'readOne']);
 Route::put('/subject/{id}',[SubjectController::class, 'update']);
 Route::delete('/subject/{id}',[SubjectController::class, 'delete']);
-Route::post('/teacher_subject', [SubjectController::class, 'teacherSubject']);
+Route::post('/select_subject', [SubjectController::class, 'selectSubject']);
 // end subject
 
 // teacher
-Route::post('/teacher_date_availability',[TeacherController::class, 'dateAvailability']);
-Route::post('/teacher_time_availability',[TeacherController::class, 'timeAvailability']);
-Route::post('/teacher_location_availability',[TeacherController::class, 'locationAvailability']);
+Route::post('/date_availability',[TeacherController::class, 'dateAvailability']);
+Route::post('/time_availability',[TeacherController::class, 'timeAvailability']);
+Route::post('/location_availability',[TeacherController::class, 'locationAvailability']);
 Route::post('/charge',[TeacherController::class, 'charge']);
 Route::get('/teacher_profile',[TeacherController::class, 'profile']);
 Route::get('/teacher_student/{user_phone_number}',[TeacherController::class, 'teacherStudent']);

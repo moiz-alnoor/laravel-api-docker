@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Subject;
-use App\Models\TeacherSubject;
+use App\Models\SelectSubject;
 
 class SubjectController extends Controller
 {
@@ -40,9 +40,9 @@ class SubjectController extends Controller
         if($subject)
         return response()->json(null, 204);
     }
-    public function teacherSubject(Request $request){
-        $subject = new TeacherSubject();
-        $subject->user_phone_number = $request->user_phone_number;
+    public function selectSubject(Request $request){
+        $subject = new SelectSubject();
+        $subject->user_phone_number = '+'.$request->user_phone_number;
         $subject->subject_id = $request->subject_id;
         $subject->grade_id = $request->grade_id;
         $subject->save();
