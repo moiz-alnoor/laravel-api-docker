@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\StudyClassController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\BadgeController;
+use App\Http\Controllers\DialogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,23 +50,26 @@ Route::post('/select_subject', [SubjectController::class, 'selectSubject']);
 Route::post('/time_availability',[TeacherController::class, 'timeAvailability']);
 Route::post('/location_availability',[TeacherController::class, 'locationAvailability']);
 Route::post('/charge',[TeacherController::class, 'charge']);
-Route::get('/teacher_profile',[TeacherController::class, 'profile']);
+Route::get('/teacher',[TeacherController::class, 'oneTeacher']);
+Route::get('/chose_teacher/{id}',[TeacherController::class, 'manyTeacher']);
 Route::get('/teacher_student/{user_phone_number}',[TeacherController::class, 'teacherStudent']);
 // end teacher
 
 //class 
 Route::get('/past_class',[StudyClassController::class, 'pastClass']);
 Route::get('/up_comming_class',[StudyClassController::class, 'upComingClass']);
-Route::get('/oneClass/{id}',[StudyClassController::class, 'oneClass']);
+Route::get('/one_class/{id}',[StudyClassController::class, 'oneClass']);
 //end class
-
 
 //garde
 Route::get('/grade',[GradeController::class, 'read']);
 //end grade
 
-
 //badge
 Route::get('/badge',[BadgeController::class, 'read']);
 Route::post('/badge',[BadgeController::class, 'create']);
 //end badge
+
+//dialog
+Route::post('/dialog',[DialogController::class, 'create']);
+//end dialogs

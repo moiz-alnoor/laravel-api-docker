@@ -10,7 +10,7 @@ class BookedClass extends Model
     public $timestamps = false;
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id', 'user_phone_number', 'select_subject_id', 'teacher_location_availability_id', 'teacher_time_availability_id'
+        'id', 'user_phone_number', 'select_subject_id', 'teacher_location_availability_id', 'teacher_time_availability_id','dialog_id'
     ];
 }
 

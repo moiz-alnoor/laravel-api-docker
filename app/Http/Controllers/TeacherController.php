@@ -3,12 +3,10 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Charge;
-use App\Models\Teacher;
 use App\Models\TeacherTimeAvailability;
-use App\Models\TeacherDateAvailability;
 use App\Models\TeacherLocationAvailability;
 use App\Models\BookedClass;
-use App\Models\Rating;
+use App\Models\SelectSubject;
 use App\Models\User;
 
 
@@ -48,28 +46,29 @@ class TeacherController extends Controller
         return response()->json($teacher, 201); 
     }
 
-    public function profile(Request $request){ 
-        //getting teacher profile
-        $rating = Rating::where('user_phone_number','+'.$request->user_phone_number)->get();
-        $charge = Charge::where('user_phone_number','+'.$request->user_phone_number)->get();
+    public function manyTeacher(Request $request, $id){ 
+        // getting teacher based chosen subject and grade 
+        $manyTeacher = SelectSubject::join('rating', 'rating.user_phone_number', '=', 'select_subject.user_phone_number')
+        ->join('charging_hours', 'charging_hours.user_phone_number', '=', 'select_subject.user_phone_number')
+        ->join('user', 'user.phone_number', '=', 'select_subject.user_phone_number')
+        ->join('subject', 'subject.id', '=', 'select_subject.subject_id')
+        ->where('select_subject.id',$id)
+        ->get(['user.name',
+               'charging_hours.amount', 
+               'rating.rating',
+               'subject.subject',
+               'user.image_location']);
+        if($manyTeacher)
+        
+ //       $rating = Rating::where('user_phone_number','+'.$request->user_phone_number)->get();
+   //     $charge = Charge::where('user_phone_number','+'.$request->user_phone_number)->get();
 
-        if(count($rating) > 0  and count($charge) > 0){
+     //   if(count($rating) > 0  and count($charge) > 0){
     
-        $teacherProfile = Teacher::join('rating', 'rating.user_phone_number', '=', 'user.phone_number')
-        ->join('charging_hours', 'charging_hours.user_phone_number', '=', 'rating.user_phone_number')
-        ->where('user.phone_number' ,'+'.$request->user_phone_number)
-        ->get(['user.*', 'charging_hours.amount', 'rating.rating']);
-        if($teacherProfile)
-        return response()->json($teacherProfile); 
-    }
-    else{
-        $teacherProfile = user::where('phone_number','+'.$request->user_phone_number)->get();
-        // return $teacherProfile;
-        // return $rating; 
-        // return $charge;
- 
-        }
-    }
+  
+        return response()->json($manyTeacher); 
+
+}
 
     public function teacherStudent(Request $request, $user_phone_number){
         //getting teacher student who teach
