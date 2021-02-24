@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class StudyClassController extends Controller
 {
-    public function upComingClass(Request $request){
+    public function upComingClass(Request $request, $user_phone_number){
        //getting up coming class
         $upComingClass = BookedClass::join('select_subject', 'select_subject.id', '=', 'booked_class.select_subject_id')
         ->join('user', 'user.phone_number', '=', 'select_subject.user_phone_number')
@@ -14,6 +14,7 @@ class StudyClassController extends Controller
         ->join('teacher_time_availability', 'teacher_time_availability.id', '=', 'booked_class.teacher_time_availability_id')
         ->join('teacher_location_availability', 'teacher_location_availability.id', '=', 'booked_class.teacher_location_availability_id')
         ->where('teacher_time_availability.date', '>', date('Y-m-d'))
+        ->where('booked_class.user_phone_number', $user_phone_number)
         ->get(['user.name',
                'subject.subject',
                'teacher_location_availability.longitude',
@@ -27,7 +28,7 @@ class StudyClassController extends Controller
 
     }
 
-    public function pastClass(Request $request){
+    public function pastClass(Request $request, $user_phone_number){
         //getting pastClass  class for student
         $pastClass = BookedClass::join('select_subject', 'select_subject.id', '=', 'booked_class.select_subject_id')
         ->join('user', 'user.phone_number', '=', 'select_subject.user_phone_number')
@@ -35,6 +36,7 @@ class StudyClassController extends Controller
         ->join('teacher_location_availability', 'teacher_location_availability.id', '=', 'booked_class.teacher_location_availability_id')
         ->join('teacher_time_availability', 'teacher_time_availability.id', '=', 'booked_class.teacher_time_availability_id')
         ->where('teacher_time_availability.date', '<', date('Y-m-d'))
+        ->where('booked_class.user_phone_number', $user_phone_number)
         ->get(['user.name',
                'subject.subject',
                'teacher_location_availability.longitude',
@@ -48,7 +50,7 @@ class StudyClassController extends Controller
 
     }
 
-    public function oneClass(Request $request, $id){
+    public function oneClass(Request $request, $booked_class_id){
        //getting one  class
         $oneclass = BookedClass::join('select_subject', 'select_subject.id', '=', 'booked_class.select_subject_id')
         ->join('user', 'user.phone_number', '=', 'select_subject.user_phone_number')
@@ -56,7 +58,7 @@ class StudyClassController extends Controller
         ->join('teacher_location_availability', 'teacher_location_availability.id', '=', 'booked_class.teacher_location_availability_id')
         ->join('teacher_time_availability', 'teacher_time_availability.id', '=', 'booked_class.teacher_time_availability_id')
         ->join('dialog', 'dialog.booked_class_id', '=', 'booked_class.id')
-        ->where('booked_class.id',$id)
+        ->where('booked_class.id',$booked_class_id)
         ->get(['user.name',
                'subject.subject',
                'teacher_location_availability.longitude',

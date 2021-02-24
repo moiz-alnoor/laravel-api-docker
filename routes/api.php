@@ -51,18 +51,19 @@ Route::post('/time_availability',[TeacherController::class, 'timeAvailability'])
 Route::post('/location_availability',[TeacherController::class, 'locationAvailability']);
 Route::post('/charge',[TeacherController::class, 'charge']);
 Route::get('/teacher',[TeacherController::class, 'oneTeacher']);
-Route::get('/chose_teacher/{id}',[TeacherController::class, 'manyTeacher']);
+Route::get('/chose_teacher/{subject_id}/{grade_id}',[TeacherController::class, 'choseTeacher']);
 Route::get('/teacher_student/{user_phone_number}',[TeacherController::class, 'teacherStudent']);
 // end teacher
 
 //class 
-Route::get('/past_class',[StudyClassController::class, 'pastClass']);
-Route::get('/up_comming_class',[StudyClassController::class, 'upComingClass']);
-Route::get('/one_class/{id}',[StudyClassController::class, 'oneClass']);
+Route::get('/past_class/{user_phone_number}',[StudyClassController::class, 'pastClass']);
+Route::get('/up_comming_class/{user_phone_number}',[StudyClassController::class, 'upComingClass']);
+Route::get('/one_class/{booked_class_id}',[StudyClassController::class, 'oneClass']);
 //end class
 
 //garde
 Route::get('/grade',[GradeController::class, 'read']);
+Route::get('/chose_grade/{subject_id}',[GradeController::class, 'choseGrade']);
 //end grade
 
 //badge

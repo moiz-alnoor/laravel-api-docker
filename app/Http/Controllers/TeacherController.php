@@ -7,8 +7,6 @@ use App\Models\TeacherTimeAvailability;
 use App\Models\TeacherLocationAvailability;
 use App\Models\BookedClass;
 use App\Models\SelectSubject;
-use App\Models\User;
-
 
 class TeacherController extends Controller
 {
@@ -46,38 +44,32 @@ class TeacherController extends Controller
         return response()->json($teacher, 201); 
     }
 
-    public function manyTeacher(Request $request, $id){ 
+    public function choseTeacher(Request $request, $subject_id, $grade_id){ 
         // getting teacher based chosen subject and grade 
-        $manyTeacher = SelectSubject::join('rating', 'rating.user_phone_number', '=', 'select_subject.user_phone_number')
-        ->join('charging_hours', 'charging_hours.user_phone_number', '=', 'select_subject.user_phone_number')
-        ->join('user', 'user.phone_number', '=', 'select_subject.user_phone_number')
+        $choseTeacher = SelectSubject::join('user', 'user.phone_number', '=', 'select_subject.user_phone_number')
         ->join('subject', 'subject.id', '=', 'select_subject.subject_id')
-        ->where('select_subject.id',$id)
+        ->join('grade', 'grade.id', '=', 'select_subject.grade_id')
+        ->where('select_subject.subject_id', $subject_id)
+        ->where('select_subject.grade_id', $grade_id)
         ->get(['user.name',
-               'charging_hours.amount', 
-               'rating.rating',
                'subject.subject',
                'user.image_location']);
-        if($manyTeacher)
-        
- //       $rating = Rating::where('user_phone_number','+'.$request->user_phone_number)->get();
-   //     $charge = Charge::where('user_phone_number','+'.$request->user_phone_number)->get();
-
-     //   if(count($rating) > 0  and count($charge) > 0){
-    
-  
-        return response()->json($manyTeacher); 
+        if($choseTeacher)
+         //$rating = Rating::where('user_phone_number','+'.$request->user_phone_number)->get();
+         //$charge = Charge::where('user_phone_number','+'.$request->user_phone_number)->get();
+         //if(count($rating) > 0  and count($charge) > 0){
+        return response()->json($choseTeacher); 
 
 }
 
     public function teacherStudent(Request $request, $user_phone_number){
         //getting teacher student who teach
-        $class = BookedClass::join('user', 'user.phone_number', '=', 'booked_class.user_phone_number')
+        $teacherStudent = BookedClass::join('user', 'user.phone_number', '=', 'booked_class.user_phone_number')
         ->join('select_subject', 'select_subject.id', '=', 'booked_class.select_subject_id')
         ->where('select_subject.user_phone_number' , $user_phone_number)
         ->get(['user.*']);
-        if($class)
-        return response()->json($class); 
+        if($teacherStudent)
+        return response()->json($teacherStudent); 
     }
     
   
