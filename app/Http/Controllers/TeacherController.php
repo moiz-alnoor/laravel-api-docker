@@ -7,6 +7,7 @@ use App\Models\TeacherTimeAvailability;
 use App\Models\TeacherLocationAvailability;
 use App\Models\BookedClass;
 use App\Models\SelectSubject;
+use App\Models\User;
 
 class TeacherController extends Controller
 {
@@ -46,26 +47,47 @@ class TeacherController extends Controller
 
     public function choseTeacher(Request $request, $subject_id, $grade_id){ 
         // getting teacher based chosen subject and grade 
-        $choseTeacher = SelectSubject::join('user', 'user.phone_number', '=', 'select_subject.user_phone_number')
-        ->join('subject', 'subject.id', '=', 'select_subject.subject_id')
-        ->join('grade', 'grade.id', '=', 'select_subject.grade_id')
+        $choseTeacher = SelectSubject::leftJoin('user', 'user.phone_number', '=', 'select_subject.user_phone_number')
+        ->leftJoin('subject', 'subject.id', '=', 'select_subject.subject_id')
+        ->leftJoin('grade', 'grade.id', '=', 'select_subject.grade_id')
+        ->leftJoin('rating', 'rating.user_phone_number', '=', 'user.phone_number')
+        ->leftJoin('charge', 'charge.user_phone_number', '=', 'user.phone_number')
+        ->leftJoin('teacher_location_availability', 'teacher_location_availability.user_phone_number', '=', 'user.phone_number')
         ->where('select_subject.subject_id', $subject_id)
         ->where('select_subject.grade_id', $grade_id)
         ->get(['user.name',
                'subject.subject',
-               'user.image_location']);
+               'user.image_location',
+               'rating.rating',
+               'charge.amount',
+               'teacher_location_availability.longitude',
+               'teacher_location_availability.latitude',
+               ]);
         if($choseTeacher)
-         //$rating = Rating::where('user_phone_number','+'.$request->user_phone_number)->get();
-         //$charge = Charge::where('user_phone_number','+'.$request->user_phone_number)->get();
-         //if(count($rating) > 0  and count($charge) > 0){
         return response()->json($choseTeacher); 
 
-}
+    }
+
+    public function teacherProfile(Request $request, $user_phone_number){ 
+        // getting teacher based chosen subject and grade 
+        $choseTeacher = User::leftJoin('rating', 'rating.user_phone_number', '=', '.user.phone_number')
+        ->leftJoin('charge', 'charge.user_phone_number', '=', 'user.phone_number')
+        ->where('user.phone_number', $user_phone_number)
+        ->get(['user.name',
+               'user.image_location',
+               'rating.rating',
+               'charge.amount'
+               ]);
+        if($choseTeacher)
+        return response()->json($choseTeacher); 
+
+    }
+
 
     public function teacherStudent(Request $request, $user_phone_number){
-        //getting teacher student who teach
-        $teacherStudent = BookedClass::join('user', 'user.phone_number', '=', 'booked_class.user_phone_number')
-        ->join('select_subject', 'select_subject.id', '=', 'booked_class.select_subject_id')
+        //getting this teacher  students
+        $teacherStudent = BookedClass::leftJoin('user', 'user.phone_number', '=', 'booked_class.user_phone_number')
+        ->leftJoin('select_subject', 'select_subject.subject_id', '=', 'booked_class.select_subject_id')
         ->where('select_subject.user_phone_number' , $user_phone_number)
         ->get(['user.*']);
         if($teacherStudent)
