@@ -18,7 +18,7 @@
                             <label for="verification_code"
                                 class="col-md-4 col-form-label text-md-right">{{ __('Phone Number') }}</label>
                             <div class="col-md-6">
-                                <input type="hidden" name="phone_number" value="{{session('phone_number')}}">
+                                <input type="text" name="phone_number" value="">
                                 <input id="verification_code" type="tel"
                                     class="form-control @error('verification_code') is-invalid @enderror"
                                     name="verification_code" value="{{ old('verification_code') }}" required>

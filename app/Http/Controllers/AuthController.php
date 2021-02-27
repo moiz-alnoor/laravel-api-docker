@@ -28,7 +28,16 @@ class AuthController extends Controller
             'phone_number' => $data['phone_number'],
             'is_verified' => 'false',
         ]);
-        return redirect()->route('verify')->with(['phone_number' => $data['phone_number']]);
+
+
+        $re = [
+            "status" => "201",
+            "details" => "'Phone Number Has Registered",
+        ];
+
+        return response()->json($re);
+        //return redirect()->route('verify')->with(['phone_number' => $data['phone_number']]);
+    
     }
 
     protected function verify(Request $request)
@@ -49,9 +58,18 @@ class AuthController extends Controller
             $user = tap(User::where('phone_number', $data['phone_number']))->update(['is_verified' => 'true']);
             /* Authenticate user */
             Auth::login($user->first());
-            return redirect()->route('home')->with(['message' => 'Phone number verified']);
+            //return redirect()->route('home')->with(['message' => 'Phone number verified']);
+            $res = [
+                "status" => "201",
+                "details" => "Phone number verified",
+            ];
+            return response()->json($res);
         }
-        return back()->with(['phone_number' => $data['phone_number'], 'error' => 'Invalid verification code entered!']);
+        //return back()->with(['phone_number' => $data['phone_number'], 'error' => 'Invalid verification code entered!']);
+        $res = [
+            "status" => "400",
+            "details" => "Invalid verification code entered!",
+        ];
+        return response()->json($res);
     }
-
 }
