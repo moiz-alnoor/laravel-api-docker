@@ -51,9 +51,7 @@ Route::post('/select_subject', [SubjectController::class, 'selectSubject']);
 Route::post('/time_availability',[TeacherController::class, 'timeAvailability']);
 Route::post('/location_availability',[TeacherController::class, 'locationAvailability']);
 Route::post('/charge',[TeacherController::class, 'charge']);
-Route::get('/teacher',[TeacherController::class, 'oneTeacher']);
 Route::get('/chose_teacher/{subject_id}/{grade_id}',[TeacherController::class, 'choseTeacher']);
-Route::get('/teacher_student/{user_phone_number}',[TeacherController::class, 'teacherStudent']);
 Route::get('/teacher_profile/{user_phone_number}',[TeacherController::class, 'teacherProfile']);
 // end teacher
 
@@ -61,8 +59,7 @@ Route::get('/teacher_profile/{user_phone_number}',[TeacherController::class, 'te
 Route::get('/pending_class/{user_phone_number}',[StudyClassController::class, 'pending']);
 Route::get('/approved_class/{user_phone_number}',[StudyClassController::class, 'approved']);
 Route::get('/past_class/{user_phone_number}',[StudyClassController::class, 'pastClass']);
-Route::get('/up_comming_class/{user_phone_number}',[StudyClassController::class, 'upComingClass']);
-Route::get('/one_class/{booked_class_id}',[StudyClassController::class, 'oneClass']);
+Route::get('/class_details/{booked_class_id}',[StudyClassController::class, 'classDetails']);
 //end class
 
 //garde
@@ -81,7 +78,6 @@ Route::post('/dialog',[DialogController::class, 'create']);
 //end dialogs
 
 //studdent
-Route::get('/student_teacher/{user_phone_number}',[StudentController::class, 'studentTeacher']);
 Route::get('/pick_date/{user_phone_number}',[StudentController::class, 'pickDate']);
 Route::get('/pick_time/{date}/{user_phone_number}',[StudentController::class, 'pickTime']);
 Route::get('/about_location/{user_phone_number}',[StudentController::class, 'aboutLocation']);

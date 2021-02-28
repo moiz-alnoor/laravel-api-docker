@@ -1,18 +1,17 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Charge extends Model
+class Status extends Model
 {
     use HasFactory;
-    protected $table = 'charge';
+    protected $table = 'class_status';
     public $timestamps = false;
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id', 'user_phone_number', 'amount'
+        'id', 'status', 
     ];
 }
-
-

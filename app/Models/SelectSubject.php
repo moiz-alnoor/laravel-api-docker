@@ -14,4 +14,17 @@ class SelectSubject extends Model
     protected $fillable = [
         'id', 'user_phone_number', 'subject_id', 'grade_id' 
     ];
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class, 'subject_id', 'id');
+    }
+    public function rating()
+    {
+        return $this->belongsTo(Rating::class, 'rating_id', 'id');
+    }
+    public function charge()
+    {
+        return $this->belongsTo(Charge::class, 'charge_id', 'id');
+    }
 }

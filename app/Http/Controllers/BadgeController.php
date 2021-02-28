@@ -18,6 +18,6 @@ class BadgeController extends Controller
     public function read(){
         $subject = Badge::all();
         if($subject)
-        return response()->json($subject);
+        return response()->json($subject, 200);
     }
 }

@@ -10,7 +10,7 @@ class GradeController extends Controller
     public function read(){
         $grade = Grade::all();
         if($grade)
-        return response()->json($grade);
+        return response()->json($grade, 200);
     }
 
     public function choseGrade(Request $request, $subject_id){
@@ -18,6 +18,6 @@ class GradeController extends Controller
         ->where('select_subject.subject_id', $subject_id)
         ->get(['grade.grade']);
         if($oneclass)
-        return response()->json($oneclass); 
+        return response()->json($oneclass, 200); 
     }
 }

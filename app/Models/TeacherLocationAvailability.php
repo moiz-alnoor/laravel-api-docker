@@ -12,5 +12,6 @@ class TeacherLocationAvailability extends Model
     protected $fillable = [
         'id', 'user_phone_number', 'longitude', 'latitude'
     ];
+
 }
 
