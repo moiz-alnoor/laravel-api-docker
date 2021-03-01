@@ -30,7 +30,7 @@ class StudyClassController extends Controller
               ->where('booked_class.status_id', $this->pending)
               ->get();
               if($pastClass)
-              return response()->json($pastClass); 
+              return response()->json($pastClass, 200); 
 
        }
        public function approved(Request $request, $user_phone_number){
@@ -40,7 +40,7 @@ class StudyClassController extends Controller
               ->where('booked_class.status_id', $this->approvd)
               ->get();
               if($pastClass)
-              return response()->json($pastClass); 
+              return response()->json($pastClass, 200); 
 
        }
        public function classDetails(Request $request, $booked_class_id){
