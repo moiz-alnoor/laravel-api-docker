@@ -18,7 +18,11 @@ class BookedClass extends Model
     
     public function dialog()
     {
-        return $this->hasMany(Dialog::class);
+        return $this->belongsTo(Dialog::class,'id', 'booked_class_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class,'phone_number', 'student_phone_number');
     }
     public function status()
     {

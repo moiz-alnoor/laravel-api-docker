@@ -11,8 +11,7 @@ class DialogController extends Controller
         $dialog = new Dialog();
         $dialog->booked_class_id = $request->booked_class_id;
         $dialog->message = $request->message;
-        $dialog->date = date("Y-m-d");
-        $dialog->time = date("h:i");
+        $dialog->date =  date("M j");
         $dialog->save();
         if($dialog)
         return response()->json($dialog, 201);
