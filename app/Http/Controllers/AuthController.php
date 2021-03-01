@@ -22,7 +22,7 @@ class AuthController extends Controller
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
-            ->create($data['phone_number'], "sms");
+            ->create('+971'.$data['phone_number'], "sms");
         User::create([
             'name' => $data['name'],
             'phone_number' => $data['phone_number'],
@@ -53,7 +53,7 @@ class AuthController extends Controller
         $twilio = new Client($twilio_sid, $token);
         $verification = $twilio->verify->v2->services($twilio_verify_sid)
             ->verificationChecks
-            ->create($data['verification_code'], array('to' => $data['phone_number']));
+            ->create($data['verification_code'], array('to' => '+971'.$data['phone_number']));
         if ($verification->valid) {
             $user = tap(User::where('phone_number', $data['phone_number']))->update(['is_verified' => 'true']);
             /* Authenticate user */

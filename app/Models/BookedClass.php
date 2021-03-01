@@ -20,9 +20,9 @@ class BookedClass extends Model
     {
         return $this->belongsTo(Dialog::class,'id', 'booked_class_id');
     }
-    public function user()
+    public function student()
     {
-        return $this->belongsTo(User::class,'phone_number', 'student_phone_number');
+        return $this->belongsTo(User::class,'student_phone_number', 'phone_number');
     }
     public function status()
     {
