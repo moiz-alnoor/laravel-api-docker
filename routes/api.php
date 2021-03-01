@@ -60,6 +60,7 @@ Route::get('/pending_class/{user_phone_number}',[StudyClassController::class, 'p
 Route::get('/approved_class/{user_phone_number}',[StudyClassController::class, 'approved']);
 Route::get('/past_class/{user_phone_number}',[StudyClassController::class, 'pastClass']);
 Route::get('/class_details/{booked_class_id}',[StudyClassController::class, 'classDetails']);
+Route::get('/group_student_class/{subject_id}/{teacher_phone_number}/{grade_id}',[StudyClassController::class, 'groupStudentClass']);
 //end class
 
 //garde

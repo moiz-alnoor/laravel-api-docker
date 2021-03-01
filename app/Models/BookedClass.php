@@ -11,7 +11,8 @@ class BookedClass extends Model
     protected $primaryKey = 'id';
    // protected $forignKey = 'teacher_location_availability_id';
     protected $fillable = [
-        'id', 'user_phone_number', 'select_subject_id', 'teacher_location_availability_id', 'teacher_time_availability_id','dialog_id'
+        'id', 'student_phone_number', 'subject_id', 'teacher_location_availability_id', 'teacher_time_availability_id', 
+        'status_id', 'teacher_phone_number', 'charge_id', 'rating_id', 'grade_id'
     ];
 
     
@@ -47,5 +48,7 @@ class BookedClass extends Model
     {
         return $this->belongsTo(Charge::class, 'charge_id', 'id');
     }
+
 }
+
 

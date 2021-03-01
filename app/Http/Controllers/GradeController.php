@@ -15,7 +15,7 @@ class GradeController extends Controller
 
     public function choseGrade(Request $request, $subject_id){
         //$choseGrade = SelectSubject::with('grade')->where('select_subject.subject_id', $subject_id)->groupby('grade.grade')->distinct()->get();
-        $oneclass = SelectSubject::join('grade', 'grade.id', '=', 'select_subject.grade_id')
+        $oneclass = SelectSubject::leftJoin('grade', 'grade.id', '=', 'select_subject.grade_id')
         ->where('select_subject.subject_id', $subject_id)
         ->distinct()
         ->get(['grade.grade']);

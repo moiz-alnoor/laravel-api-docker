@@ -49,4 +49,16 @@ class StudyClassController extends Controller
               if($classDetails)
               return response()->json($classDetails, 200); 
        }
+
+       public function groupStudentClass(Request $request, $subject_id, $teacher_phone_number, $grade_id){
+              $groupStudentClass = BookedClass::leftJoin('user','user.phone_number', '=', 'booked_class.student_phone_number')
+              ->leftJoin('dialog','dialog.booked_class_id', '=', 'booked_class.id')
+              ->where('booked_class.subject_id', $subject_id)
+              ->where('booked_class.teacher_phone_number', $teacher_phone_number)
+              ->where('booked_class.grade_id', $grade_id)
+              ->distinct()
+              ->get(['user.name','user.image_location','dialog.message','dialog.date','dialog.time']);
+              if($groupStudentClass)
+              return response()->json($groupStudentClass, 200); 
+       }
 }
