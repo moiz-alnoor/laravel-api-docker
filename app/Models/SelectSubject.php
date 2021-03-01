@@ -27,4 +27,8 @@ class SelectSubject extends Model
     {
         return $this->belongsTo(Charge::class, 'charge_id', 'id');
     }
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class, 'grade_id', 'id');
+    }
 }

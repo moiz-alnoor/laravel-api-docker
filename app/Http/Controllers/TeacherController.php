@@ -5,8 +5,8 @@ use Illuminate\Http\Request;
 use App\Models\Charge;
 use App\Models\TeacherTimeAvailability;
 use App\Models\TeacherLocationAvailability;
-use App\Models\BookedClass;
 use App\Models\SelectSubject;
+use App\Models\Teacher;
 use App\Models\User;
 
 class TeacherController extends Controller
@@ -67,20 +67,9 @@ class TeacherController extends Controller
 
     public function teacherProfile(Request $request, $teacher_phone_number){ 
         // getting teacher based chosen subject and grade 
-        $choseTeacher = User::leftJoin('rating', 'rating.user_phone_number', '=', 'user.phone_number')
-        ->leftJoin('charge', 'charge.teacher_phone_number', '=', 'user.phone_number')
-        ->where('user.phone_number', $teacher_phone_number)
-        ->get(['user.name',
-               'user.image_location',
-               'rating.rating',
-               'charge.amount'
-               ]);
+        $choseTeacher = Teacher::with(['rating','charge'])->where('user.phone_number',$teacher_phone_number)->get();
         if($choseTeacher)
         return response()->json($choseTeacher,200); 
-
     }
-
-    
-  
 }
 

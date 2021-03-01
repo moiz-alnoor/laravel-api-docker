@@ -18,7 +18,7 @@ class Teacher extends Authenticatable
      */
 
     protected $table = 'user';
-    protected $primaryKey = 'phone_number';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'name','image_loaction','phone_number', 'is_verified','user_type_id' 
     ];
@@ -32,8 +32,16 @@ class Teacher extends Authenticatable
     public function teacherRating()
     {
         return $this->hasOne(Rating::class);
-    }
-     
+    }   
     */
+
+    public function rating()
+    {
+        return $this->belongsTo(Rating::class, 'phone_number', 'teacher_phone_number');
+    }
+    public function charge()
+    {
+        return $this->belongsTo(Charge::class, 'phone_number', 'teacher_phone_number');
+    }
 
 }
