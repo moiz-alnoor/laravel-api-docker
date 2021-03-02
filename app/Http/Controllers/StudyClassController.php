@@ -9,7 +9,7 @@ class StudyClassController extends Controller
 
        private  $pending = 1;
        private  $approvd = 2;
-       private  $past = 3;
+       private  $past    = 3;
 
        public function pastClass(Request $request, $user_phone_number){
               //getting pastClass  class for student

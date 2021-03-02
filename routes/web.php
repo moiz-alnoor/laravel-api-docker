@@ -33,6 +33,6 @@ $data = DB::table('student')->first();
   return response()->json($data->id);
 });
 
-Route::post('/register', [AuthController::class, 'create']);
-Route::post('/verify',   [AuthController::class, 'verify']);
+//Route::post('/register', [AuthController::class, 'create']);
+//Route::post('/verify',   [AuthController::class, 'verify']);
 // end otp auth

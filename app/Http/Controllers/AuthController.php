@@ -9,6 +9,8 @@ use Twilio\Rest\Client;
 
 class AuthController extends Controller
 {
+
+    private $country_code = '+971';
     protected function create(Request $request)
     {
         $data = $request->validate([
@@ -22,7 +24,7 @@ class AuthController extends Controller
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
-            ->create('+971'.$data['phone_number'], "sms");
+            ->create('+'.$request->country_code.$data['phone_number'], "sms");
         User::create([
             'name' => $data['name'],
             'phone_number' => $data['phone_number'],
@@ -30,12 +32,12 @@ class AuthController extends Controller
         ]);
 
 
-        $re = [
+        $create = [
             "status" => "201",
-            "details" => "'Phone Number Has Registered",
+            "message" => "'phone number has registered",
         ];
 
-        return response()->json($re);
+        return response()->json($create);
         //return redirect()->route('verify')->with(['phone_number' => $data['phone_number']]);
     
     }
@@ -53,23 +55,23 @@ class AuthController extends Controller
         $twilio = new Client($twilio_sid, $token);
         $verification = $twilio->verify->v2->services($twilio_verify_sid)
             ->verificationChecks
-            ->create($data['verification_code'], array('to' => '+971'.$data['phone_number']));
+            ->create($data['verification_code'], array('to' => '+'.$request->country_code.$data['phone_number']));
         if ($verification->valid) {
             $user = tap(User::where('phone_number', $data['phone_number']))->update(['is_verified' => 'true']);
             /* Authenticate user */
             Auth::login($user->first());
             //return redirect()->route('home')->with(['message' => 'Phone number verified']);
-            $res = [
+            $verify = [
                 "status" => "201",
-                "details" => "Phone number verified",
+                "details" => "phone number verified",
             ];
-            return response()->json($res);
+            return response()->json($verify);
         }
         //return back()->with(['phone_number' => $data['phone_number'], 'error' => 'Invalid verification code entered!']);
-        $res = [
+        $verify = [
             "status" => "400",
-            "details" => "Invalid verification code entered!",
+            "message" => "invalid verification code entered!",
         ];
-        return response()->json($res);
+        return response()->json($verify);
     }
 }

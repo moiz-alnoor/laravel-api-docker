@@ -24,13 +24,20 @@ use App\Http\Controllers\StudentController;
 */
 
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+  //  return $request->user();
+//});
 
 
 // user
 // otp auth
+
+Route::get('/add', function (Request $request) {
+      $name =  11;
+      return response()->json($name, 200); 
+    });
+
+    
 Route::post('/register', [AuthController::class, 'create']);
 Route::post('/verify',   [AuthController::class, 'verify']);
 // end otp auth
@@ -39,18 +46,18 @@ Route::put('/user_type', [UserController::class, 'userType']);
 // end user
 
 // subject
-Route::post('/subject',[SubjectController::class, 'create']);
-Route::get('/subject',[SubjectController::class, 'read']);
-Route::get('/subject/{id}',[SubjectController::class, 'readOne']);
-Route::put('/subject/{id}',[SubjectController::class, 'update']);
-Route::delete('/subject/{id}',[SubjectController::class, 'delete']);
-Route::post('/select_subject', [SubjectController::class, 'selectSubject']);
+Route::post('/create_subject',[SubjectController::class, 'create']);
+Route::get('/read_subject',[SubjectController::class, 'read']);
+Route::get('/reade_subject/{id}',[SubjectController::class, 'readOne']);
+Route::put('/update_subject/{id}',[SubjectController::class, 'update']);
+Route::delete('/delete_subject/{id}',[SubjectController::class, 'delete']);
+Route::post('/select_your_subject', [SubjectController::class, 'selectSubject']);
 // end subject
 
 // teacher
-Route::post('/time_availability',[TeacherController::class, 'timeAvailability']);
-Route::post('/location_availability',[TeacherController::class, 'locationAvailability']);
-Route::post('/charge',[TeacherController::class, 'charge']);
+Route::post('/teacher_time_availability',[TeacherController::class, 'timeAvailability']);
+Route::post('/teacher_location_availability',[TeacherController::class, 'locationAvailability']);
+Route::post('/charge_per_hour',[TeacherController::class, 'charge']);
 Route::get('/chose_teacher/{subject_id}/{grade_id}',[TeacherController::class, 'choseTeacher']);
 Route::get('/teacher_profile/{user_phone_number}',[TeacherController::class, 'teacherProfile']);
 // end teacher
@@ -69,6 +76,8 @@ Route::get('/chose_grade/{subject_id}',[GradeController::class, 'choseGrade']);
 //end grade
 
 //badge
+Route::post('/add_requirement',[BadgeController::class, 'addRequirement']);
+Route::get('/reade_requirement',[BadgeController::class, 'readeRequirement']);
 Route::get('/badge',[BadgeController::class, 'read']);
 Route::post('/badge',[BadgeController::class, 'create']);
 //end badge
