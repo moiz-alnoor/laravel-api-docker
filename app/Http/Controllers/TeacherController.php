@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\BookedClass;
 use Illuminate\Http\Request;
 use App\Models\Charge;
 use App\Models\TeacherTimeAvailability;
@@ -71,5 +73,17 @@ class TeacherController extends Controller
         if($choseTeacher)
         return response()->json($choseTeacher,200); 
     }
+
+    public function teacherStudent(Request $request, $teacher_phone_number){ 
+        // getting teacher based chosen subject and grade 
+        $choseTeacher = BookedClass::leftJoin('user', 'user.phone_number', '=', 'booked_class.student_phone_number')
+        ->leftJoin('dialog','dialog.booked_class_id', '=' ,'booked_class.id')
+        ->where('booked_class.teacher_phone_number',$teacher_phone_number)
+        ->distinct()
+        ->get(['user.phone_number','user.name','dialog.message','dialog.date']);
+        if($choseTeacher)
+        return response()->json($choseTeacher,200); 
+    }
+
 }
 

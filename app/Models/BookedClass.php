@@ -46,11 +46,11 @@ class BookedClass extends Model
     }
     public function rating()
     {
-        return $this->belongsTo(Rating::class, 'rating_id', 'id');
+        return $this->belongsTo(Rating::class, 'teacher_phone_number', 'teacher_phone_number');
     }
     public function charge()
     {
-        return $this->belongsTo(Charge::class, 'charge_id', 'id');
+        return $this->belongsTo(Charge::class, 'teacher_phone_number', 'teacher_phone_number');
     }
 
 }
