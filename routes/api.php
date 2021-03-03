@@ -31,13 +31,19 @@ use App\Http\Controllers\StudentController;
 
 // user
 // otp auth
+Route::group([
 
-Route::get('/add', function (Request $request) {
-      $name =  11;
-      return response()->json($name, 200); 
-    });
+  'middleware' => 'api',
+  'prefix' => 'auth'
 
-    
+], function ($router) {
+
+  Route::post('login', [AuthController::class, 'login']);
+  Route::post('logout', 'AuthController@logout');
+  Route::post('refresh', 'AuthController@refresh');
+  Route::post('me', 'AuthController@me');
+
+});
 Route::post('/register', [AuthController::class, 'create']);
 Route::post('/verify',   [AuthController::class, 'verify']);
 // end otp auth
