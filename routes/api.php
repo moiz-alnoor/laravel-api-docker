@@ -32,20 +32,19 @@ use App\Http\Controllers\StudentController;
 // user
 // otp auth
 Route::group([
-
   'middleware' => 'api',
   'prefix' => 'auth'
 
 ], function ($router) {
-
-  Route::post('login', [AuthController::class, 'login']);
-  Route::post('logout', 'AuthController@logout');
-  Route::post('refresh', 'AuthController@refresh');
-  Route::post('me', 'AuthController@me');
-
+  Route::post('/login', [AuthController::class, 'login']);
+  Route::post('/register', [AuthController::class, 'register']);
+  Route::post('/logout', [AuthController::class, 'logout']);
+  Route::post('/refresh', [AuthController::class, 'refresh']);
+  Route::get('/user-profile', [AuthController::class, 'userProfile']);    
 });
-Route::post('/register', [AuthController::class, 'create']);
-Route::post('/verify',   [AuthController::class, 'verify']);
+
+//Route::post('/register', [AuthController::class, 'r']);
+//Route::post('/verify',   [AuthController::class, 'verify']);
 // end otp auth
 
 Route::put('/user_type', [UserController::class, 'userType']);
