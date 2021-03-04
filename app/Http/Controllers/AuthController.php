@@ -26,11 +26,6 @@ class AuthController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request){
-    	$validator = Validator::make($request->all(), [
-            'phone_number' => 'required',
-            'password' => 'required',
-            'verification_code' => 'required',
-        ]);
 
         $token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_sid = getenv("TWILIO_SID");
@@ -38,29 +33,40 @@ class AuthController extends Controller
         $twilio = new Client($twilio_sid, $token);
         $verification = $twilio->verify->v2->services($twilio_verify_sid)
             ->verificationChecks
-            ->create($request['verification_code'], array('to' => '+'.$request['country_code'].$request['phone_number']));
+            ->create($request->verification_code, array('to' => '+' . $request->country_code . $request->phone_number));
         if ($verification->valid) {
-            $user = tap(User::where('phone_number', $request['phone_number']))->update(['is_verified' => 'true']);
+            $user = tap(User::where('phone_number', $request->phone_number))->update(['is_verified' => 'true']);
             /* Authenticate user */
             Auth::login($user->first());
             //return redirect()->route('home')->with(['message' => 'Phone number verified']);
-            $message = [
+            $verify = [
                 "status" => "201",
                 "details" => "phone number verified",
             ];
-            if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
-            }
-    
-            if (! $token = auth()->attempt($validator->validated())) {
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
-    
-            return $this->createNewToken($token,$message);
+            return response()->json($verify);
+        }
+        else{
+            $verify = [
+                "status" => "400",
+                "details" => ":( not verified",
+            ];
         }
 
 
-     
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        if (! $token = auth()->attempt($validator->validated())) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->createNewToken($token,$verify);
     }
 
     /**
@@ -86,7 +92,7 @@ class AuthController extends Controller
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
-            ->create('+'.$request->country_code.$request['phone_number'], "sms");
+            ->create('+'.$request->country_code.$request->phone_number, "sms");
         $user = User::create(array_merge(
                     $validator->validated(),
                     ['password' => bcrypt($request->password)]
@@ -106,7 +112,6 @@ class AuthController extends Controller
      */
     public function logout() {
         auth()->logout();
-
         return response()->json(['message' => 'User successfully signed out']);
     }
 
@@ -135,9 +140,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function createNewToken($token,$message){
+    protected function createNewToken($token,$verify){
         return response()->json([
-            'message' => $message,
+            'verify_details' => $verify,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
