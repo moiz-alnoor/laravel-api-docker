@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use GuzzleHttp\Psr7\Message;
-use Validator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client;
+use Validator;
 
 class AuthController extends Controller
 {
@@ -16,7 +15,8 @@ class AuthController extends Controller
      *
      * @return void
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
@@ -25,34 +25,8 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request){
-
-        $token = getenv("TWILIO_AUTH_TOKEN");
-        $twilio_sid = getenv("TWILIO_SID");
-        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
-        $twilio = new Client($twilio_sid, $token);
-        $verification = $twilio->verify->v2->services($twilio_verify_sid)
-            ->verificationChecks
-            ->create($request->verification_code, array('to' => '+' . $request->country_code . $request->phone_number));
-        if ($verification->valid) {
-            $user = tap(User::where('phone_number', $request->phone_number))->update(['is_verified' => 'true']);
-            /* Authenticate user */
-            Auth::login($user->first());
-            //return redirect()->route('home')->with(['message' => 'Phone number verified']);
-            $verify = [
-                "status" => "201",
-                "details" => "phone number verified",
-            ];
-            return response()->json($verify);
-        }
-        else{
-            $verify = [
-                "status" => "400",
-                "details" => ":( not verified",
-            ];
-        }
-
-
+    public function login(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'phone_number' => 'required',
             'password' => 'required',
@@ -62,11 +36,31 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        if (! $token = auth()->attempt($validator->validated())) {
+        if (!$token = auth()->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+        return $userLoged = response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => auth()->user(),
+        ]);
 
-        return $this->createNewToken($token,$verify);
+     /*if($userLoged){
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+        $twilio = new Client($twilio_sid, $token);
+        $verification = $twilio->verify->v2->services($twilio_verify_sid)
+            ->verificationChecks
+            ->create($request->verification_code, array('to' => '+'.$request->country_code.$request->phone_number));
+        if ($verification->valid) {
+            $user = tap(User::where('phone_number',  '+'.$request->country_code.$request->phone_number))->update(['is_verified' => true]);
+            Auth::login($user->first());
+            return redirect()->route('home')->with(['message' => 'Phone number verified']);
+        }
+    }*/
+    
     }
 
     /**
@@ -74,18 +68,24 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|between:2,100',
-            'phone_number' => 'required',
-            'password' => 'required',
-            'country_code' => 'required',
-        
+            'phone_number' => 'required|max:100|unique:users',
+            'country_code' => 'required|min:3',
+            'password' => 'required|min:3',
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 400);
         }
+
+        $userRegistered = User::create(array_merge(
+            $validator->validated(),
+            ['password' => bcrypt($request->password)]
+        ));
+      if($userRegistered){
         $token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_sid = getenv("TWILIO_SID");
         $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
@@ -93,24 +93,23 @@ class AuthController extends Controller
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
             ->create('+'.$request->country_code.$request->phone_number, "sms");
-        $user = User::create(array_merge(
-                    $validator->validated(),
-                    ['password' => bcrypt($request->password)]
-                ));
-
-        return response()->json([
+      }
+         return response()->json([
             'message' => 'User successfully registered',
-            'user' => $user
-        ], 201);
+            'user' => $userRegistered,
+        ], 201); 
+        
+  
+    
     }
-
 
     /**
      * Log the user out (Invalidate the token).
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout() {
+    public function logout()
+    {
         auth()->logout();
         return response()->json(['message' => 'User successfully signed out']);
     }
@@ -120,7 +119,8 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function refresh() {
+    public function refresh()
+    {
         return $this->createNewToken(auth()->refresh());
     }
 
@@ -129,7 +129,8 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function userProfile() {
+    public function userProfile()
+    {
         return response()->json(auth()->user());
     }
 
@@ -140,14 +141,17 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function createNewToken($token,$verify){
+    protected function createNewToken($token)
+    {
+    
         return response()->json([
-            'verify_details' => $verify,
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'user' => auth()->user()
+            'user' => auth()->user(),
         ]);
+
     }
+
 
 }
