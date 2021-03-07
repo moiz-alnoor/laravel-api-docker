@@ -11,7 +11,7 @@ class Charge extends Model
     public $timestamps = false;
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id', 'user_phone_number', 'amount'
+        'id', 'amount','user_id'
     ];
 }
 

@@ -17,10 +17,10 @@ class Teacher extends Authenticatable
      * @var array
      */
 
-    protected $table = 'user';
+    protected $table = 'users';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'name','image_loaction','phone_number', 'is_verified','user_type_id' 
+        'id', 'name', 'phone_number', 'password', 'remember_token', 'is_verified','created_at', 'updated_at'
     ];
 
 
@@ -37,11 +37,11 @@ class Teacher extends Authenticatable
 
     public function rating()
     {
-        return $this->belongsTo(Rating::class, 'phone_number', 'teacher_phone_number');
+        return $this->belongsTo(Rating::class, 'id', 'user_id');
     }
     public function charge()
     {
-        return $this->belongsTo(Charge::class, 'phone_number', 'teacher_phone_number');
+        return $this->belongsTo(Charge::class, 'id', 'user_id');
     }
 
 }

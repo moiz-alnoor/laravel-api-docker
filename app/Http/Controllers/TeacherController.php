@@ -19,7 +19,7 @@ class TeacherController extends Controller
         $teacher->from = $request->from;
         $teacher->to = $request->to;
         $teacher->date = $request->date;
-        $teacher->teacher_phone_number = '+'.$request->teacher_phone_number;
+        $teacher->user_id = $request->user_id;
         $teacher->save();
         if($teacher)
         return response()->json($teacher, 201);
@@ -29,7 +29,7 @@ class TeacherController extends Controller
     public function locationAvailability(Request $request){
         // set date available
         $loaction = new TeacherLocationAvailability();
-        $loaction->teacher_phone_number = '+'.$request->teacher_phone_number;
+        $loaction->user_id = $request->user_id;
         $loaction->longitude = $request->longitude;
         $loaction->latitude = $request->latitude;
         $loaction->save();
@@ -40,7 +40,7 @@ class TeacherController extends Controller
     public function charge(Request $request){
         // teacher charge per hour
         $teacher = new Charge();
-        $teacher->teacher_phone_number = '+'.$request->teacher_phone_number;
+        $teacher->user_id = $request->user_id;
         $teacher->amount = $request->amount;
         $teacher->save();
         if($teacher)
@@ -49,16 +49,16 @@ class TeacherController extends Controller
 
     public function choseTeacher(Request $request, $subject_id, $grade_id){ 
         // getting teacher based chosen subject and grade 
-        $choseTeacher = SelectSubject::leftJoin('user', 'user.phone_number', '=', 'select_subject.teacher_phone_number')
+        $choseTeacher = SelectSubject::leftJoin('users', 'users.id', '=', 'select_subject.user_id')
         ->leftJoin('subject', 'subject.id', '=', 'select_subject.subject_id')
         ->leftJoin('grade', 'grade.id', '=', 'select_subject.grade_id')
-        ->leftJoin('rating', 'rating.teacher_phone_number', '=', 'user.phone_number')
-        ->leftJoin('charge', 'charge.teacher_phone_number', '=', 'user.phone_number')
+        ->leftJoin('rating', 'rating.user_id', '=', 'users.id')
+        ->leftJoin('charge', 'charge.user_id', '=', 'users.id')
         ->where('select_subject.subject_id', $subject_id)
         ->where('select_subject.grade_id', $grade_id)
-        ->get(['user.name',
+        ->get(['users.name',
                'subject.subject',
-               'user.image_location',
+               'users.image_location',
                'rating.rating',
                'charge.amount',
                ]);
@@ -67,20 +67,20 @@ class TeacherController extends Controller
 
     }
 
-    public function teacherProfile(Request $request, $teacher_phone_number){ 
+    public function teacherProfile(Request $request, $user_id){ 
         // getting teacher based chosen subject and grade 
-        $choseTeacher = Teacher::with(['rating','charge'])->where('user.phone_number',$teacher_phone_number)->get();
+        $choseTeacher = Teacher::with(['rating','charge'])->where('users.id',$user_id)->get();
         if($choseTeacher)
         return response()->json($choseTeacher,200); 
     }
 
-    public function teacherStudent(Request $request, $teacher_phone_number){ 
+    public function teacherStudent(Request $request, $user_id){ 
         // getting teacher based chosen subject and grade 
-        $choseTeacher = BookedClass::leftJoin('user', 'user.phone_number', '=', 'booked_class.student_phone_number')
+        $choseTeacher = BookedClass::leftJoin('users', 'users.id', '=', 'booked_class.student_user_id')
         ->leftJoin('dialog','dialog.booked_class_id', '=' ,'booked_class.id')
-        ->where('booked_class.teacher_phone_number',$teacher_phone_number)
+        ->where('booked_class.teacher_user_id',$user_id)
         ->distinct()
-        ->get(['user.phone_number','user.name','dialog.message','dialog.date']);
+        ->get(['users.phone_number','users.name','dialog.message','dialog.date']);
         if($choseTeacher)
         return response()->json($choseTeacher,200); 
     }

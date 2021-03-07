@@ -10,7 +10,7 @@ class TeacherLocationAvailability extends Model
     public $timestamps = false;
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id', 'user_phone_number', 'longitude', 'latitude'
+        'id', 'user_id', 'longitude', 'latitude'
     ];
 
 }

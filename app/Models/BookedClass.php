@@ -11,8 +11,7 @@ class BookedClass extends Model
     protected $primaryKey = 'id';
    // protected $forignKey = 'teacher_location_availability_id';
     protected $fillable = [
-        'id', 'student_phone_number', 'subject_id', 'teacher_location_availability_id', 'teacher_time_availability_id', 
-        'status_id', 'teacher_phone_number', 'charge_id', 'rating_id', 'grade_id'
+        'id', 'student_user_id', 'teacher_user_id', 'teacher_location_availability_id', 'teacher_time_availability_id', 'subject_id', 'status_id', 'grade_id'
     ];
 
     
@@ -22,7 +21,7 @@ class BookedClass extends Model
     }
     public function student()
     {
-        return $this->belongsTo(User::class,'student_phone_number', 'phone_number');
+        return $this->belongsTo(User::class,'student_user_id', 'id');
     }
     public function status()
     {
@@ -30,7 +29,7 @@ class BookedClass extends Model
     }
     public function location()
     {
-        return $this->belongsTo(TeacherLocationAvailability::class, 'teacher_location_availability_id', 'id');
+        return $this->belongsTo(TeacherLocationAvailability::class, 'teacher_location_availability_id', 'user_id');
     }
     public function subject()
     {
@@ -38,19 +37,19 @@ class BookedClass extends Model
     }
     public function time()
     {
-        return $this->belongsTo(TeacherTimeAvailability::class, 'teacher_time_availability_id', 'id');
+        return $this->belongsTo(TeacherTimeAvailability::class, 'teacher_time_availability_id', 'user_id');
     }
     public function teacher()
     {
-        return $this->belongsTo(User::class, 'teacher_phone_number', 'phone_number');
+        return $this->belongsTo(User::class, 'teacher_user_id', 'id');
     }
     public function rating()
     {
-        return $this->belongsTo(Rating::class, 'teacher_phone_number', 'teacher_phone_number');
+        return $this->belongsTo(Rating::class, 'teacher_user_id', 'user_id');
     }
     public function charge()
     {
-        return $this->belongsTo(Charge::class, 'teacher_phone_number', 'teacher_phone_number');
+        return $this->belongsTo(Charge::class, 'teacher_user_id', 'user_id');
     }
 
 }

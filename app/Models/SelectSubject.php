@@ -12,7 +12,7 @@ class SelectSubject extends Model
     public $timestamps = false;
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id', 'user_phone_number', 'subject_id', 'grade_id' 
+        'id', 'user_id', 'subject_id', 'grade_id'
     ];
 
     public function subject()

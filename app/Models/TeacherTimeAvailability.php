@@ -13,6 +13,6 @@ class TeacherTimeAvailability extends Model
     public $timestamps = false;
     //protected $primaryKey = 'id';
     protected $fillable = [
-        'id','from','to','date','teacher_phone_number' 
+        'id', 'from', 'to', 'user_id', 'date'
     ];
 }

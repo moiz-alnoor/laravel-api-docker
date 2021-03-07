@@ -10,23 +10,23 @@ class StudentController extends Controller
 {
  
 
-    public function pickDate(Request $request, $teacher_phone_number){
+    public function pickDate(Request $request, $user_id){
          // pick suitable time to studey
-        $pickDate = TeacherTimeAvailability::where('teacher_phone_number' , $teacher_phone_number)
+        $pickDate = TeacherTimeAvailability::where('user_id' , $user_id)
         ->get(['teacher_time_availability.date']);
         if($pickDate)
         return response()->json($pickDate, 200); 
 }
-    public function pickTime(Request $request, $date, $teacher_phone_number){
+    public function pickTime(Request $request, $date, $user_id){
         // pick suitable time to studey
-        $pickTime = TeacherTimeAvailability::where('teacher_phone_number', $teacher_phone_number)->where('date', $date)
+        $pickTime = TeacherTimeAvailability::where('user_id', $user_id)->where('date', $date)
         ->get();
         if($pickTime)
         return response()->json($pickTime, 200); 
 }
-    public function aboutLocation(Request $request, $teacher_phone_number){
+    public function aboutLocation(Request $request, $user_id){
         // pick suitable time to studey
-        $aboutLocation = TeacherLocationAvailability::where('teacher_phone_number', $teacher_phone_number)
+        $aboutLocation = TeacherLocationAvailability::where('user_id', $user_id)
         ->get();
         if($aboutLocation)
         return response()->json($aboutLocation, 200); 
@@ -45,8 +45,8 @@ class StudentController extends Controller
     public function book(Request $request)
     {
         $book = new BookedClass();
-        $book->student_phone_number = $request->student_phone_number;
-        $book->teacher_phone_number = $request->teacher_phone_number;
+        $book->student_user_id = $request->student_user_id;
+        $book->teacher_user_id = $request->teacher_user_id;
         $book->teacher_location_availability_id = $request->teacher_location_availability_id;
         $book->teacher_time_availability_id = $request->teacher_time_availability_id;
         $book->subject_id = $request->subject_id;

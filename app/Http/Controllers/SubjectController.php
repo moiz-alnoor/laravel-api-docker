@@ -42,7 +42,7 @@ class SubjectController extends Controller
     }
     public function selectSubject(Request $request){
         $subject = new SelectSubject();
-        $subject->teacher_phone_number = '+'.$request->teacher_phone_number;
+        $subject->user_id = '+'.$request->user_id;
         $subject->subject_id = $request->subject_id;
         $subject->grade_id = $request->grade_id;
         $subject->save();

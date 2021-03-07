@@ -11,11 +11,11 @@ class StudyClassController extends Controller
        private  $approvd = 2;
        private  $past    = 3;
 
-       public function pastClass(Request $request, $user_phone_number){
+       public function pastClass(Request $request, $user_id){
               //getting pastClass  class for student
               $pastClass = BookedClass::with(['dialog','status','subject','location','time','teacher','rating','charge'])
               ->where('booked_class.status_id', $this->past)
-              ->where('booked_class.student_phone_number', $user_phone_number)
+              ->where('booked_class.student_user_id', $user_id)
               ->get();
               if($pastClass)
               return response()->json($pastClass, 200); 
@@ -23,20 +23,20 @@ class StudyClassController extends Controller
        }
 
       
-       public function pending(Request $request, $user_phone_number){
+       public function pending(Request $request, $user_id){
               //getting pastClass  class for student
               $pastClass = BookedClass::with(['dialog','status','subject','location','time','teacher','rating','charge'])
-              ->where('booked_class.student_phone_number', $user_phone_number)
+              ->where('booked_class.student_user_id', $user_id)
               ->where('booked_class.status_id', $this->pending)
               ->get();
               if($pastClass)
               return response()->json($pastClass, 200); 
 
        }
-       public function approved(Request $request, $user_phone_number){
+       public function approved(Request $request, $user_id){
               //getting pastClass  class for student
               $pastClass = BookedClass::with(['dialog','status','subject','location','time','teacher','rating','charge']) 
-              ->where('booked_class.student_phone_number', $user_phone_number)
+              ->where('booked_class.student_user_id', $user_id)
               ->where('booked_class.status_id', $this->approvd)
               ->get();
               if($pastClass)
