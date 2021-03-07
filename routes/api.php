@@ -44,11 +44,11 @@ Route::group([
   Route::get('/user-profile', [AuthController::class, 'userProfile']);    
 });
 
-//Route::post('/register', [AuthController::class, 'r']);
-//Route::post('/verify',   [AuthController::class, 'verify']);
 // end otp auth
 
-Route::put('/user_type', [UserController::class, 'userType']);
+
+// user 
+Route::post('/user_type', [UserController::class, 'userType']);
 // end user
 
 // subject
