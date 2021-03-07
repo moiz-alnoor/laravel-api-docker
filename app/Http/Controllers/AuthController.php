@@ -28,44 +28,37 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required',
-            'password' => 'required',
+            'password' => 'required|string',
+            'phone_number' => 'required'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        /* Get credentials from .env */
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+        $twilio = new Client($twilio_sid, $token);
+        $verification = $twilio->verify->v2->services($twilio_verify_sid)
+            ->verificationChecks
+            ->create($request->verification_code, array('to' => '+'.$request->country_code.$request->phone_number));
+        if ($verification->valid) {
+            $user = tap(User::where('phone_number', $request->phone_number))->update(['is_verified' => true]);
+    
         }
-
-        if (! $token = auth()->attempt($validator->validated())) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        return $this->createNewToken($token);
-
-        }
-
-        protected function verify(Request $request)
-        {
-            $data = $request->validate([
-                'verification_code' => ['required', 'numeric'],
-                'phone_number' => ['required', 'string'],
-            ]);
-            /* Get credentials from .env */
-            $token = getenv("TWILIO_AUTH_TOKEN");
-            $twilio_sid = getenv("TWILIO_SID");
-            $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
-            $twilio = new Client($twilio_sid, $token);
-            $verification = $twilio->verify->v2->services($twilio_verify_sid)
-                ->verificationChecks
-                ->create('501734', array('to' => '+970553239521'));
-            if ($verification->valid) {
-                $user = tap(User::where('phone_number', '+970553239521'))->update(['is_verified' => true]);
-                /* Authenticate user */
-                Auth::login($user->first());
-             //   return redirect()->route('home')->with(['message' => 'Phone number verified']);
+        if($user){
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
             }
-           // return back()->with(['phone_number' => $data['phone_number'], 'error' => 'Invalid verification code entered!']);
+    
+            if (! $token = auth()->attempt($validator->validated())) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+    
+            return $this->createNewToken($token);
         }
+    
+    }
+
+
 
 
     /**
@@ -75,37 +68,35 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|between:2,100',
-            'phone_number' => 'required|max:100|unique:users',
-            'country_code' => 'required|min:3',
-            'password' => 'required|min:3',
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'phone_number' => ['required', 'numeric', 'unique:users'],
+            'country_code' => ['required'],
+            'password' => ['required', 'string'],
         ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
-        }
-
-        $userRegistered = User::create(array_merge(
-            $validator->validated(),
-            ['password' => bcrypt($request->password)]
-        ));
-      if($userRegistered){
+        /* Get credentials from .env */
         $token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_sid = getenv("TWILIO_SID");
         $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
-            ->create('+'.$request->country_code.$request->phone_number, "sms");
+            ->create('+'.$request->country_code.$data['phone_number'], "sms");
+        $user = User::create([
+            'name' => $data['name'],
+            'phone_number' => $data['phone_number'],
+            'password' => bcrypt($request->password),
+            'is_verified' => false,
+        ]);
+
         
-            return response()->json([
-                'message' => 'User successfully registered',
-                'user' => $userRegistered,
-            ], 201); 
-            
-      }
+        return response()->json([
+            'message' => 'User successfully registered',
+            'user' => $user
+        ], 201);
+
     }
+
 
     /**
      * Log the user out (Invalidate the token).
