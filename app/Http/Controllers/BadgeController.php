@@ -4,22 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Badge;
+use App\Models\BookedClass;
 use App\Models\Requirement;
+use App\Models\SelectSubject;
 
 class BadgeController extends Controller
 {
-    public function create(Request $request){
-        $badge = new Badge();
-        $badge->badge = $request->badge;
-        $badge->save();
+
+ 
+
+    public function read(Request $request,$user_id){
+        $badge = BookedClass::leftJoin('subject', 'subject.id', '=', 'booked_class.subject_id')
+        ->distinct()
+        ->where('teacher_user_id',$user_id)
+        ->get(['subject.subject']);
         if($badge)
-        return response()->json($badge, 201);
-    }
-    
-    public function read(){
-        $subject = Badge::all();
-        if($subject)
-        return response()->json($subject, 200);
+        return response()->json($badge,200); 
     }
     public function addRequirement(Request $request)
     {

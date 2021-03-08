@@ -17,7 +17,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register','verify']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','verify','logout','userProfile']]);
     }
 
     /**
@@ -48,7 +48,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Phone number verified',
             ], 201);
-            return $this->login($request->phone_number, $request->password);
+      
         }
         return response()->json([
             'message' => 'Invalid verification code entered!',
@@ -58,7 +58,6 @@ class AuthController extends Controller
     public function login(Request $request){
     	$validator = Validator::make($request->all(), [
             'phone_number' => 'required',
-            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
