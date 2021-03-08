@@ -35,7 +35,7 @@ class AuthController extends Controller
             'phone_number' => ['required', 'string'],
             'country_code' => 'required'
         ]);
-   
+
         $token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_sid = getenv("TWILIO_SID");
         $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
@@ -81,12 +81,15 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+
+      
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'numeric', 'unique:users'],
             'country_code' => ['required'],
             'password' => ['required', 'string'],
         ]);
+
         /* Get credentials from .env */
         $token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_sid = getenv("TWILIO_SID");
