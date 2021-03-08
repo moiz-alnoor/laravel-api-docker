@@ -99,5 +99,5 @@ Route::get('/pick_date/{user_id}',[StudentController::class, 'pickDate']);
 Route::get('/pick_time/{date}/{user_id}',[StudentController::class, 'pickTime']);
 Route::get('/about_location/{user_id}',[StudentController::class, 'aboutLocation']);
 Route::get('/student_teacher/{student_phone_number}',[StudentController::class, 'studentTeacher']);
-Route::post('/book',[StudentController::class, 'book']);
+Route::post('/booked_class',[StudentController::class, 'BookedClass']);
 //end student

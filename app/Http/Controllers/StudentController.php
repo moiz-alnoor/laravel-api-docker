@@ -42,7 +42,7 @@ class StudentController extends Controller
         if($choseTeacher)
         return response()->json($choseTeacher,200); 
     }
-    public function book(Request $request)
+    public function BookedClass(Request $request)
     {
         $book = new BookedClass();
         $book->student_user_id = $request->student_user_id;

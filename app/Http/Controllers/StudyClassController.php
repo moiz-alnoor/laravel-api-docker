@@ -44,7 +44,7 @@ class StudyClassController extends Controller
 
        }
        public function classDetails(Request $request, $booked_class_id){
-              //getting one  class
+              //getting one  class with details
               $classDetails = BookedClass::with(['dialog','status','subject','location','time','teacher','rating','charge'])->where('booked_class.id', $booked_class_id)->get();
               if($classDetails)
               return response()->json($classDetails, 200); 
