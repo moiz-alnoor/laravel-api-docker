@@ -14,10 +14,11 @@ class BadgeController extends Controller
  
 
     public function read(Request $request,$user_id){
-        $badge = BookedClass::leftJoin('subject', 'subject.id', '=', 'booked_class.subject_id')
+        $badge = SelectSubject::leftJoin('subject', 'subject.id', '=', 'select_subject.subject_id')
+        ->leftJoin('grade', 'grade.id', '=', 'select_subject.grade_id')
         ->distinct()
-        ->where('teacher_user_id',$user_id)
-        ->get(['subject.subject']);
+        ->where('user_id',$user_id)
+        ->get();
         if($badge)
         return response()->json($badge,200); 
     }

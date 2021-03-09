@@ -44,15 +44,15 @@ Route::group([
 
 
 // user
-Route::middleware('auth:api')->post('/user_type', [UserController::class, 'userType']);
+Route::middleware('auth:api')->put('/user_type/{user_id}', [UserController::class, 'userType']);
 // end user
 
 // subject
-Route::middleware('auth:api')->post('/create_subject', [SubjectController::class, 'create']);
-Route::middleware('auth:api')->get('/read_subject', [SubjectController::class, 'read']);
-Route::middleware('auth:api')->get('/reade_subject/{id}', [SubjectController::class, 'readOne']);
-Route::middleware('auth:api')->put('/update_subject/{id}', [SubjectController::class, 'update']);
-Route::middleware('auth:api')->delete('/delete_subject/{id}', [SubjectController::class, 'delete']);
+Route::middleware('auth:api')->post('/subject', [SubjectController::class, 'create']);
+Route::middleware('auth:api')->get('/subject', [SubjectController::class, 'read']);
+Route::middleware('auth:api')->get('/subject/{id}', [SubjectController::class, 'readOne']);
+Route::middleware('auth:api')->put('/subject/{id}', [SubjectController::class, 'update']);
+Route::middleware('auth:api')->delete('/subject/{id}', [SubjectController::class, 'delete']);
 Route::middleware('auth:api')->post('/select_your_subject', [SubjectController::class, 'selectSubject']);
 // end subject
 
@@ -70,7 +70,7 @@ Route::middleware('auth:api')->get('/pending_class/{user_id}', [StudyClassContro
 Route::middleware('auth:api')->get('/approved_class/{user_phone_number}', [StudyClassController::class, 'approved']);
 Route::middleware('auth:api')->get('/past_class/{user_phone_number}', [StudyClassController::class, 'pastClass']);
 Route::middleware('auth:api')->get('/class_details/{booked_class_id}', [StudyClassController::class, 'classDetails']);
-Route::middleware('auth:api')->get('/group_student_class/{subject_id}/{teacher_phone_number}/{grade_id}', [StudyClassController::class, 'groupStudentClass']);
+//Route::middleware('auth:api')->get('/group_student_class/{subject_id}/{teacher_phone_number}/{grade_id}', [StudyClassController::class, 'groupStudentClass']);
 //end class
 
 //garde
@@ -91,7 +91,7 @@ Route::middleware('auth:api')->post('/booked_class', [StudentController::class, 
 //end student
 
 //badge
-Route::middleware('auth:api')->post('/add_requirement', [BadgeController::class, 'addRequirement']);
-Route::middleware('auth:api')->get('/reade_requirement', [BadgeController::class, 'readeRequirement']);
-Route::middleware('auth:api')->get('/get_badge/{user_id}', [BadgeController::class, 'read']);
+Route::middleware('auth:api')->post('/requirement', [BadgeController::class, 'addRequirement']);
+Route::middleware('auth:api')->get('/requirement', [BadgeController::class, 'readeRequirement']);
+Route::middleware('auth:api')->get('/badge/{user_id}', [BadgeController::class, 'read']);
 //end badge
