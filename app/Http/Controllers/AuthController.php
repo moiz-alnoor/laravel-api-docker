@@ -17,7 +17,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register','verify','logout','userProfile']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'verify', 'logout', 'userProfile']]);
     }
 
     /**
@@ -27,13 +27,12 @@ class AuthController extends Controller
      */
 
     public function verify(Request $request)
-    {  
-        
-        
+    {
+
         $data = $request->validate([
             'verification_code' => ['required', 'numeric'],
             'phone_number' => ['required', 'string'],
-            'country_code' => 'required'
+            'country_code' => ['required'],
         ]);
 
         $token = getenv("TWILIO_AUTH_TOKEN");
@@ -42,21 +41,22 @@ class AuthController extends Controller
         $twilio = new Client($twilio_sid, $token);
         $verification = $twilio->verify->v2->services($twilio_verify_sid)
             ->verificationChecks
-            ->create($data['verification_code'], array('to' => '+'.$request->country_code.$data['phone_number']));
+            ->create($data['verification_code'], array('to' => '+' . $request->country_code . $data['phone_number']));
         if ($verification->valid) {
             $user = tap(User::where('phone_number', $data['phone_number']))->update(['is_verified' => true]);
             return response()->json([
                 'message' => 'Phone number verified',
             ], 201);
-      
+
         }
         return response()->json([
             'message' => 'Invalid verification code entered!',
         ], 201);
     }
 
-    public function login(Request $request){
-    	$validator = Validator::make($request->all(), [
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'phone_number' => 'required',
             'password' => 'required|string',
         ]);
@@ -65,14 +65,12 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        if (! $token = auth()->attempt($validator->validated())) {
+        if (!$token = auth()->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         return $this->createNewToken($token);
     }
-
-
 
     /**
      * Register a User.
@@ -82,7 +80,6 @@ class AuthController extends Controller
     public function register(Request $request)
     {
 
-      
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'numeric', 'unique:users'],
@@ -90,14 +87,14 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        /* Get credentials from .env */
+        /*  Get credentials from .env  */
         $token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_sid = getenv("TWILIO_SID");
         $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
-            ->create('+'.$request->country_code.$data['phone_number'], "sms");
+            ->create('+' . $request->country_code . $data['phone_number'], "sms");
         $user = User::create([
             'name' => $data['name'],
             'phone_number' => $data['phone_number'],
@@ -105,14 +102,12 @@ class AuthController extends Controller
             'is_verified' => false,
         ]);
 
-        
         return response()->json([
             'message' => 'User successfully registered',
-            'user' => $user
+            'user' => $user,
         ], 201);
 
     }
-
 
     /**
      * Log the user out (Invalidate the token).
@@ -154,7 +149,7 @@ class AuthController extends Controller
      */
     protected function createNewToken($token)
     {
-    
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
@@ -163,6 +158,5 @@ class AuthController extends Controller
         ]);
 
     }
-
 
 }
