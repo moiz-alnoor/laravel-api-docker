@@ -11,7 +11,8 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Client\Request;
-
+use phpDocumentor\Reflection\DocBlock\Tags\Uses;
+use App\Models\User;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -33,9 +34,10 @@ Route::group([
     //'prefix' => 'auth'
 ], function ($router) {
     Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/sign_in', [AuthController::class, 'signIn']);
     Route::post('/verify', [AuthController::class, 'verify']);
     Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/logout/{user_id}', [AuthController::class, 'logout']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
 });
@@ -95,3 +97,7 @@ Route::middleware('auth:api')->post('/requirement', [BadgeController::class, 'ad
 Route::middleware('auth:api')->get('/requirement', [BadgeController::class, 'readeRequirement']);
 Route::middleware('auth:api')->get('/badge/{user_id}', [BadgeController::class, 'read']);
 //end badge
+
+Route::get('/users', function () {
+    return User::all();
+  });
