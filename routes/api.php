@@ -51,7 +51,7 @@ Route::middleware('auth:api')->put('/user_type/{user_id}', [UserController::clas
 
 // subject
 Route::middleware('auth:api')->post('/subject', [SubjectController::class, 'create']);
-Route::middleware('auth:api')->get('/subject', [SubjectController::class, 'read']);
+Route::get('/subject', [SubjectController::class, 'read']);
 Route::middleware('auth:api')->get('/subject/{id}', [SubjectController::class, 'readOne']);
 Route::middleware('auth:api')->put('/subject/{id}', [SubjectController::class, 'update']);
 Route::middleware('auth:api')->delete('/subject/{id}', [SubjectController::class, 'delete']);

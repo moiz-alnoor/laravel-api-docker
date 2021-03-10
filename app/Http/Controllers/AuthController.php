@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserLogedOut;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client;
@@ -30,38 +31,39 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-
+        /*  validatee input  */
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'numeric', 'unique:users'],
             'country_code' => ['required'],
-            // 'password' => ['required', 'string'],
         ]);
 
-        /*  Get credentials from .env  */
-        $token = getenv("TWILIO_AUTH_TOKEN");
+        /*  if the user logedout  */
+        $userLogedOut = userLogedOut::where('phone_number', $data['phone_number'])->first();
+        if ($userLogedOut) {
+            return response()->json([
+                'message' => 'User exist, just Sign in!',
+            ], 201);
+        } else
+
+        /*  Get credentials from .env  and send OTP*/
+        {
+            $token = getenv("TWILIO_AUTH_TOKEN");
+        }
+
         $twilio_sid = getenv("TWILIO_SID");
         $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
             ->create('+' . $request->country_code . $data['phone_number'], "sms");
-        $userOut = UserOut::where('phone_number', $data['phone_number'])->first();
-        if ($userOut) {
-            $user = User::create([
-                'name' => $userOut->name,
-                'phone_number' => $userOut->phone_number,
-                'password' => bcrypt(':)'),
-                'is_verified' => false,
-            ]);
-        } else {
-            $user = User::create([
-                'name' => $data['name'],
-                'phone_number' => $data['phone_number'],
-                'password' => bcrypt(':)'),
-                'is_verified' => false,
-            ]);
-        }
+        $user = User::create([
+            'id' => rand(),
+            'name' => $data['name'],
+            'phone_number' => $data['phone_number'],
+            'password' => bcrypt(':)'),
+            'is_verified' => false,
+        ]);
 
         return response()->json([
             'message' => 'User successfully registered',
@@ -77,7 +79,7 @@ class AuthController extends Controller
 
     public function verify(Request $request)
     {
-
+        /*  validatee input  */
         $data = $request->validate([
             'verification_code' => ['required', 'numeric'],
             'phone_number' => ['required', 'string'],
@@ -116,20 +118,20 @@ class AuthController extends Controller
 
         //
         $user = User::find($user_id);
+   
+        /*  move user to as loged out  */
+        $userLogedOut = new userLogedOut();
+        $userLogedOut->id = $user->id;
+        $userLogedOut->name = $user->name;
+        $userLogedOut->phone_number = $user->phone_number;
+        $userLogedOut->user_type = $user->user_type;
+        $userLogedOut->image_location = $user->image_location;
+        $userLogedOut->save();
 
-        //
-        $userOutDelete = UserOut::destroy($user_id);
-
-        //
-        $addUserOut = new UserOut();
-        $addUserOut->name = $user->name;
-        $addUserOut->phone_number = $user->phone_number;
-        $addUserOut->password = bcrypt(':)');
-        $addUserOut->is_verified = false;
-        $addUserOut->save();
-
-        if ($addUserOut) {
+        if ($userLogedOut) {
             $user->forceDelete();
+     //
+     User::destroy($user_id);
             return response()->json(['message' => 'User successfully signed out']);
         }
     }
@@ -138,12 +140,15 @@ class AuthController extends Controller
     {
 
         $data = $request->validate([
-            'phone_number' => ['required', 'numeric', 'unique:users'],
+            'phone_number' => ['required'],
             'country_code' => ['required'],
-            // 'password' => ['required', 'string'],
         ]);
-
-        /*  Get credentials from .env  */
+        $userLogedOut = userLogedOut::where('phone_number', $data['phone_number'])->first();
+        if(!is_object($userLogedOut)){
+            return response()->json([
+                'message' => 'Please register'
+            ], 201);
+        }
         $token = getenv("TWILIO_AUTH_TOKEN");
         $twilio_sid = getenv("TWILIO_SID");
         $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
@@ -151,20 +156,19 @@ class AuthController extends Controller
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
             ->create('+' . $request->country_code . $data['phone_number'], "sms");
-        //$user = tap(User::where('phone_number', $request->phone_number))->update(['is_verified' => true]);
-
-        /*$user = User::where('phone_number', $request->phone_number)->first();
-        if ($user) {
-        $user = User::find($user->id);
-        $user->is_verified = true;
-        $user->save();
-        return $user;
-         */
-
+        $user = User::create([
+            'id' => $userLogedOut->id,
+            'name' => $userLogedOut->name,
+            'phone_number' => $data['phone_number'],
+            'password' => bcrypt(':)'),
+            'is_verified' => false,
+        ]);
+        userLogedOut::destroy($userLogedOut);
         return response()->json([
             'message' => 'User successfully registered',
-            //    'user' => $user,
+            'user' => $user,
         ], 201);
+
     }
     /**
      * Refresh a token.
