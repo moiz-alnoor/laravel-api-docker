@@ -34,8 +34,7 @@ class AuthController extends Controller
 
         $data = $request->validate([
             'phone_number' => ['required'],
-            'country_code' => ['required'],
-            'name' => ['required'],
+            'country_code' => ['required']
         ]);
 
         $user = user::where('phone_number', $data['phone_number'])->first();
@@ -55,7 +54,7 @@ class AuthController extends Controller
                  
                 $user = User::create([
                     'id' => mt_rand(),
-                    'name' => $data['name'],
+                    'name' => 'user',
                     'phone_number' => $data['phone_number'],
                     'password' => bcrypt(':)'),
                     'is_verified' => false,
@@ -76,7 +75,7 @@ class AuthController extends Controller
                     ->create('+' . $request->country_code . $data['phone_number'], "sms");
 
                     return response()->json([
-                        'message' => 'User, exist. now verify your phone',
+                        'message' => 'User exist, just verify your phone',
                         'user' => $user,
                     ], 201);
           
