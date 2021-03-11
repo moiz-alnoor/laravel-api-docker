@@ -99,5 +99,8 @@ Route::middleware('auth:api')->get('/badge/{user_id}', [BadgeController::class, 
 //end badge
 
 Route::get('/users', function () {
-    return User::all();
+    $uniques = range(10000, 99999);
+    shuffle($uniques);
+    $uniques = array_slice($uniques, 0, 500);
+    print_r($uniques[0].$uniques[1]);
   });
