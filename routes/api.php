@@ -94,13 +94,11 @@ Route::middleware('auth:api')->post('/booked_class', [StudentController::class, 
 
 //badge
 Route::middleware('auth:api')->post('/requirement', [BadgeController::class, 'addRequirement']);
-Route::middleware('auth:api')->get('/requirement', [BadgeController::class, 'readeRequirement']);
+Route::middleware('auth:api')->get('/requirement', [BadgeController::class, 'requirementList']);
 Route::middleware('auth:api')->get('/badge/{user_id}', [BadgeController::class, 'read']);
+Route::get('/reward/{user_id}', [BadgeController::class, 'rwardList']);
 //end badge
 
 Route::get('/users', function () {
-    $uniques = range(10000, 99999);
-    shuffle($uniques);
-    $uniques = array_slice($uniques, 0, 500);
-    print_r($uniques[0].$uniques[1]);
+
   });

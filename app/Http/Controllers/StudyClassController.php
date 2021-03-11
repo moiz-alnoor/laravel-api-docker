@@ -9,12 +9,13 @@ class StudyClassController extends Controller
 
        private  $pending = 1;
        private  $approvd = 2;
-       private  $past    = 3;
+       private  $complete  = 3;
+       //private  $past    = 3;
 
        public function pastClass(Request $request, $user_id){
               //getting pastClass  class for student
               $pastClass = BookedClass::with(['dialog','status','subject','location','time','teacher','rating','charge'])
-              ->where('booked_class.status_id', $this->past)
+              ->where('booked_class.status_id', $this->complete)
               ->where('booked_class.student_user_id', $user_id)
               ->get();
               if($pastClass)
