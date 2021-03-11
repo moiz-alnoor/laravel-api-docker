@@ -84,6 +84,11 @@ class TeacherController extends Controller
         if($choseTeacher)
         return response()->json($choseTeacher,200); 
     }
+    public function teacherReview(Request $request, $user_id){
+        $teacherReview = Teacher::with(['review'])->where('users.id',$user_id)->get();
+        if($teacherReview)
+        return response()->json($teacherReview, 200); 
+    }
 
 }
 

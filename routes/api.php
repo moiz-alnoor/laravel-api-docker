@@ -65,6 +65,8 @@ Route::middleware('auth:api')->post('/charge_per_hour', [TeacherController::clas
 Route::middleware('auth:api')->get('/chose_teacher/{subject_id}/{grade_id}', [TeacherController::class, 'choseTeacher']);
 Route::middleware('auth:api')->get('/teacher_profile/{user_id}', [TeacherController::class, 'teacherProfile']);
 Route::middleware('auth:api')->get('/teacher_student/{user_id}', [TeacherController::class, 'teacherStudent']);
+Route::middleware('auth:api')->get('/teacher_review/{user_id}', [TeacherController::class, 'teacherReview']);
+Route::middleware('auth:api')->get('/teacher_notification/{user_id}', [TeacherController::class, 'teacherNotification']);
 // end teacher
 
 //class

@@ -40,5 +40,9 @@ class Teacher extends Model
     {
         return $this->belongsTo(Charge::class, 'id', 'user_id');
     }
+    public function review()
+    {
+        return $this->belongsTo(Review::class, 'id', 'teacher_user_id');
+    }
 
 }
