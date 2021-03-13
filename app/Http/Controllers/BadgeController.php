@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookedClass;
-use App\Models\Rating;
+use App\Models\Review;
 use App\Models\Requirement;
 use App\Models\SelectSubject;
 use Illuminate\Http\Request;
@@ -11,7 +11,10 @@ use Illuminate\Http\Request;
 class BadgeController extends Controller
 {
 
-    private $complete = 4;
+    private  $pending = 1;
+       private  $approvd = 2;
+       private  $complete  = 3;
+  
 
     public function read(Request $request, $user_id)
     {
@@ -46,17 +49,19 @@ class BadgeController extends Controller
 
     }
 
-    public function rwardList(Request $request, $user_id)
+    public function rwardList(Request $request, $user_id,$subject_id, $grade_id)
     {
         $completeClass = BookedClass::where('student_user_id', $user_id)
             ->where('status_id', $this->complete)
+            ->where('subject_id', $subject_id)
+            ->where('grade_id', $grade_id)
             ->get();
             
         $comment = BookedClass::leftJoin('dialog', 'dialog.booked_class_id', '=', 'booked_class.id')
              ->where('student_user_id', $user_id)
              ->get(['dialog.message']);
 
-        $review = Rating::where('teacher_user_id', '=', $user_id)->get();
+        $review = Review::where('teacher_user_id', '=', $user_id)->get();
 
         $completeClassNumber = count($completeClass);
         $commentNumber = count($comment);

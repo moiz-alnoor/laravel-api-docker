@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    protected $table = 'Rating';
+    protected $table = 'review';
     public $timestamps = false;
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id', 'user_phone_number', 'teacher_subject_id', 'rating' 
+        'id', 'teacher_user_id', 'student_user_id', 'rating', 'comment'
     ];
 }
 

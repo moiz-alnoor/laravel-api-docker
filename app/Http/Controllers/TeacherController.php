@@ -67,9 +67,9 @@ class TeacherController extends Controller
 
     }
 
-    public function teacherProfile(Request $request, $user_id){ 
-        // getting teacher based chosen subject and grade 
-        $choseTeacher = Teacher::with(['rating','charge'])->where('users.id',$user_id)->get();
+    public function teacher(Request $request, $user_id){ 
+        // getting teacher profile
+        $choseTeacher = Teacher::with(['charge'])->where('users.id',$user_id)->get();
         if($choseTeacher)
         return response()->json($choseTeacher,200); 
     }
@@ -80,12 +80,12 @@ class TeacherController extends Controller
         ->leftJoin('dialog','dialog.booked_class_id', '=' ,'booked_class.id')
         ->where('booked_class.teacher_user_id',$user_id)
         ->distinct()
-        ->get(['users.phone_number','users.name','dialog.message','dialog.date']);
+        ->get(['users.phone_number','users.name','users.user_type','dialog.message','dialog.date']);
         if($choseTeacher)
         return response()->json($choseTeacher,200); 
     }
     public function teacherReview(Request $request, $user_id){
-        $teacherReview = Teacher::with(['review'])->where('users.id',$user_id)->get();
+        $teacherReview = Teacher::with(['review','charge'])->where('users.id',$user_id)->get();
         if($teacherReview)
         return response()->json($teacherReview, 200); 
     }

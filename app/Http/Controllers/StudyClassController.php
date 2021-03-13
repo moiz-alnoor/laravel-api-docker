@@ -10,11 +10,11 @@ class StudyClassController extends Controller
        private  $pending = 1;
        private  $approvd = 2;
        private  $complete  = 3;
-       //private  $past    = 3;
+  
 
-       public function pastClass(Request $request, $user_id){
+       public function complete(Request $request, $user_id){
               //getting pastClass  class for student
-              $pastClass = BookedClass::with(['dialog','status','subject','location','time','teacher','rating','charge'])
+              $pastClass = BookedClass::with(['status','subject','location','time','teacher','charge'])
               ->where('booked_class.status_id', $this->complete)
               ->where('booked_class.student_user_id', $user_id)
               ->get();
@@ -26,25 +26,25 @@ class StudyClassController extends Controller
       
        public function pending(Request $request, $user_id){
               //getting pastClass  class for student
-              $pastClass = BookedClass::with(['dialog','status','subject','location','time','teacher','rating','charge'])
+              $pendingClass = BookedClass::with(['status','subject','location','time','teacher','charge'])
               ->where('booked_class.student_user_id', $user_id)
               ->where('booked_class.status_id', $this->pending)
               ->get();
-              if($pastClass)
-              return response()->json($pastClass, 200); 
+              if($pendingClass)
+              return response()->json($pendingClass, 200); 
 
        }
        public function approved(Request $request, $user_id){
               //getting pastClass  class for student
-              $pastClass = BookedClass::with(['dialog','status','subject','location','time','teacher','rating','charge']) 
+              $approvedClass = BookedClass::with(['status','subject','location','time','teacher','charge']) 
               ->where('booked_class.student_user_id', $user_id)
               ->where('booked_class.status_id', $this->approvd)
               ->get();
-              if($pastClass)
-              return response()->json($pastClass, 200); 
+              if($approvedClass)
+              return response()->json($approvedClass, 200); 
 
        }
-       public function classDetails(Request $request, $booked_class_id){
+       public function class(Request $request, $booked_class_id){
               //getting one  class with details
               $classDetails = BookedClass::with(['dialog','status','subject','location','time','teacher','rating','charge'])->where('booked_class.id', $booked_class_id)->get();
               if($classDetails)

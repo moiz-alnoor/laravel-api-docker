@@ -32,13 +32,13 @@ class StudentController extends Controller
         return response()->json($aboutLocation, 200); 
     }
 
-    public function studentTeacher(Request $request, $student_phone_number){ 
+    public function studentTeacher(Request $request, $user_id){ 
         // getting teacher based chosen subject and grade 
-        $choseTeacher = BookedClass::leftJoin('user', 'user.phone_number', '=', 'booked_class.teacher_phone_number')
+        $choseTeacher = BookedClass::leftJoin('users', 'users.id', '=', 'booked_class.teacher_user_id')
         ->leftJoin('dialog','dialog.booked_class_id', '=' ,'booked_class.id')
-        ->where('booked_class.teacher_phone_number', $student_phone_number)
+        ->where('booked_class.student_user_id', $user_id)
         ->distinct()
-        ->get(['user.phone_number','user.name','dialog.message','dialog.date']);
+        ->get(['users.phone_number','users.name','users.user_type','dialog.message','dialog.date']);
         if($choseTeacher)
         return response()->json($choseTeacher,200); 
     }
