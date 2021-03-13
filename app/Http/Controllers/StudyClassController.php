@@ -44,11 +44,13 @@ class StudyClassController extends Controller
               return response()->json($approvedClass, 200); 
 
        }
-       public function class(Request $request, $booked_class_id){
+       public function bookedClass(Request $request, $booked_class_id){
               //getting one  class with details
-              $classDetails = BookedClass::with(['dialog','status','subject','location','time','teacher','rating','charge'])->where('booked_class.id', $booked_class_id)->get();
-              if($classDetails)
-              return response()->json($classDetails, 200); 
+              $pendingClass = BookedClass::with(['status','subject','location','time','teacher','charge','dialog'])
+              ->where('booked_class.id', $booked_class_id)
+              ->get();
+              if($pendingClass)
+              return response()->json($pendingClass, 200); 
        }
 
        public function groupStudentClass(Request $request, $subject_id, $teacher_phone_number, $grade_id){

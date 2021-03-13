@@ -43,9 +43,9 @@ class BookedClass extends Model
     {
         return $this->belongsTo(User::class, 'teacher_user_id', 'id');
     }
-    public function rating()
+    public function review()
     {
-        return $this->belongsTo(Rating::class, 'teacher_user_id', 'teacher_user_id');
+        return $this->belongsTo(Review::class, 'teacher_user_id', 'teacher_user_id');
     }
     public function charge()
     {

@@ -8,16 +8,17 @@ use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client;
 
 /* DOCs
-   https://www.positronx.io/laravel-jwt-authentication-tutorial-user-login-signup-api/
-   https://www.twilio.com/blog/verify-phone-numbers-php-laravel-application-twilio-verify
-*/
-class AuthController extends Controller{
+https://www.positronx.io/laravel-jwt-authentication-tutorial-user-login-signup-api/
+https://www.twilio.com/blog/verify-phone-numbers-php-laravel-application-twilio-verify
+https://stackoverflow.com/questions/38709480/ttl-not-expired-in-jwt-auth-laravel
+ */
+class AuthController extends Controller
+{
 
     public function __construct()
     {
         $this->middleware('auth:api', ['except' => ['login', 'signIn', 'register', 'verify', 'logout', 'userProfile']]);
     }
-
 
     public function register(Request $request)
     {
@@ -63,6 +64,10 @@ class AuthController extends Controller{
             $twilio->verify->v2->services($twilio_verify_sid)
                 ->verifications
                 ->create('+' . $request->country_code . $data['phone_number'], "sms");
+
+            User::where('phone_number', $data['phone_number'])
+                ->update(['is_verified' => false]);
+
             return response()->json([
                 'message' => 'User exist, just verify your phone',
                 'user' => $user,
@@ -72,7 +77,6 @@ class AuthController extends Controller{
 
     }
 
- 
     public function verify(Request $request)
     {
         /*  validatee input  */
@@ -119,8 +123,6 @@ class AuthController extends Controller{
         return $this->createNewToken(auth()->refresh());
     }
 
- 
-     
     public function userProfile()
     {
         return response()->json(auth()->user());
@@ -133,7 +135,7 @@ class AuthController extends Controller{
             'message' => 'Phone number verified',
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 360,
+            'expires_in' => auth()->factory()->getTTL() * 60,
             'user' => auth()->user(),
         ]);
     }

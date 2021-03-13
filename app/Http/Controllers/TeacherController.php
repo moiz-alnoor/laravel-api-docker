@@ -9,7 +9,7 @@ use App\Models\TeacherTimeAvailability;
 use App\Models\TeacherLocationAvailability;
 use App\Models\SelectSubject;
 use App\Models\Teacher;
-use App\Models\User;
+
 
 class TeacherController extends Controller
 {
