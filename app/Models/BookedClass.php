@@ -1,31 +1,35 @@
 <?php
 
 namespace App\Models;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+//use App\Models\Notifiable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 
 class BookedClass extends Model
 {
+
+    use Notifiable;
+
     protected $table = 'booked_class';
     public $timestamps = false;
     protected $primaryKey = 'id';
-   // protected $forignKey = 'teacher_location_availability_id';
+    // protected $forignKey = 'teacher_location_availability_id';
     protected $fillable = [
-        'id', 'student_user_id', 'teacher_user_id', 'teacher_location_availability_id', 'teacher_time_availability_id', 'subject_id', 'status_id', 'grade_id'
+        'id', 'student_user_id', 'teacher_user_id', 'teacher_location_availability_id', 'teacher_time_availability_id', 'subject_id', 'status_id', 'grade_id',
     ];
 
-    
     public function dialog()
     {
-        return $this->belongsTo(Dialog::class,'id', 'booked_class_id');
+        return $this->belongsTo(Dialog::class, 'id', 'booked_class_id');
     }
     public function student()
     {
-        return $this->belongsTo(User::class,'student_user_id', 'id');
+        return $this->belongsTo(User::class, 'student_user_id', 'id');
     }
     public function status()
     {
-        return $this->belongsTo(Status::class,'status_id', 'id');
+        return $this->belongsTo(Status::class, 'status_id', 'id');
     }
     public function location()
     {
@@ -52,6 +56,19 @@ class BookedClass extends Model
         return $this->belongsTo(Charge::class, 'teacher_user_id', 'user_id');
     }
 
+    public function sendNotification()
+    {
+        $this->notify(new ProductAdded($this)); //Pass the model data to the OneSignal Notificator
+    }
+
+    public function routeNotificationForOneSignal()
+    {
+        /*
+         * you have to return the one signal player id tat will
+         * receive the message of if you want you can return
+         * an array of players id
+         */
+        return ['email' => 'mmoiz.aalnoor@gmail.com'];
+        //return $this->data->user_one_signal_id;
+    }
 }
-
-
