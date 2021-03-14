@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
 use App\Models\BookedClass;
+use App\Models\Student;
 use App\Models\TeacherTimeAvailability;
 use App\Models\TeacherLocationAvailability;
-use Illuminate\Http\Request;
+
 
 class StudentController extends Controller
 {
@@ -33,14 +35,14 @@ class StudentController extends Controller
     }
 
     public function studentTeacher(Request $request, $user_id){ 
-        // getting teacher based chosen subject and grade 
-        $choseTeacher = BookedClass::leftJoin('users', 'users.id', '=', 'booked_class.teacher_user_id')
-        ->leftJoin('dialog','dialog.booked_class_id', '=' ,'booked_class.id')
+        // getting all teachers of this student 
+        $studentTeacher = BookedClass::leftJoin('users', 'users.id', '=', 'booked_class.teacher_user_id')
+        ->leftJoin('dialog','dialog.teacher_user_id', '=' ,'booked_class.teacher_user_id')
         ->where('booked_class.student_user_id', $user_id)
         ->distinct()
-        ->get(['users.phone_number','users.name','users.user_type','dialog.message','dialog.date']);
-        if($choseTeacher)
-        return response()->json($choseTeacher,200); 
+        ->get(['users.name','users.image_location','users.user_type','dialog.message','dialog.date']);
+        if($studentTeacher)
+        return response()->json($studentTeacher,200); 
     }
     public function BookedClass(Request $request)
     {
@@ -55,6 +57,11 @@ class StudentController extends Controller
         $book->save();
         if($book)
         return response()->json($book, 201);
+    }
+    public function studentReview(Request $request, $user_id){
+        $teacherReview = Student::with(['review'])->where('users.id',$user_id)->get();
+        if($teacherReview)
+        return response()->json($teacherReview, 200);
     }
 
 }

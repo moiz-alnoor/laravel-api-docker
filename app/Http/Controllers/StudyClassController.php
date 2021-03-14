@@ -53,19 +53,16 @@ class StudyClassController extends Controller
               return response()->json($pendingClass, 200); 
        }
 
-       public function groupStudentClass(Request $request, $subject_id, $teacher_phone_number, $grade_id){
-            $groupStudentClass = BookedClass::with(['dialog','student'])   
+       public function classGroup(Request $request, $user_id, $subject_id, $grade_id){
+
+               $classGroup = BookedClass::leftJoin('users','users.id', '=', 'booked_class.student_user_id')
+              ->leftJoin('dialog','dialog.user_id', '=', 'booked_class.student_user_id')
               ->where('booked_class.subject_id', $subject_id)
-              ->where('booked_class.teacher_phone_number', $teacher_phone_number)
-              ->where('booked_class.grade_id', $grade_id)->get();
-              /*  $groupStudentClass = BookedClass::leftJoin('user','user.phone_number', '=', 'booked_class.student_phone_number')
-              ->leftJoin('dialog','dialog.booked_class_id', '=', 'booked_class.id')
-              ->where('booked_class.subject_id', $subject_id)
-              ->where('booked_class.teacher_phone_number', $teacher_phone_number)
+              ->where('booked_class.teacher_user_id', $user_id)
               ->where('booked_class.grade_id', $grade_id)
               ->distinct()
-              ->get(['user.name','user.phone_number','user.image_location','dialog.message','dialog.date']);*/
-              if($groupStudentClass)
-              return response()->json($groupStudentClass, 200); 
+              ->get(['users.name','users.image_location','dialog.message','dialog.date']);
+              if($classGroup)
+              return response()->json($classGroup, 200); 
        }
 }
