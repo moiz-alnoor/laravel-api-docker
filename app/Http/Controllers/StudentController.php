@@ -91,7 +91,7 @@ class StudentController extends Controller
 
         $fields = array(
             'app_id' => "b27ac1bf-f719-4b8b-a2c8-b8e01131a2df",
-            'include_player_ids' => array("8844bec0-c251-44c5-b852-d27f5687ca19", "76ece62b-bcfe-468c-8a78-839aeaa8c5fa", "8e0f21fa-9a5a-4ae7-a9a6-ca1f24294b86"),
+            'include_player_ids' => array("8844bec0-c251-44c5-b852-d27f5687ca19"),
             // 'data' => array("foo" => "bar"),
             'contents' => $content,
         );

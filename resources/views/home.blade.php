@@ -14,13 +14,13 @@
     <body>
 
 
-       
+
             <form action="http://127.0.0.1:8080/api/student/booked_class_list" method="get">
                   <input type="submit">
             </form>
 
 
-       
+
 
     </body>
 </html>

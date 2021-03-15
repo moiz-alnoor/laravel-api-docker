@@ -48,7 +48,8 @@ Route::group([
 
 
 // user
-Route::middleware('auth:api')->put('/user_type/{user_id}', [UserController::class, 'userType']);
+Route::middleware('auth:api')->put('/user/type/{user_id}', [UserController::class, 'userType']);
+Route::middleware('auth:api')->put('/user/player_id/{user_id}', [UserController::class, 'userId']);
 // end user
 
 // subject
@@ -105,5 +106,3 @@ Route::middleware('auth:api')->get('/requirement', [BadgeController::class, 'req
 Route::middleware('auth:api')->get('/badge/{user_id}', [BadgeController::class, 'badgeList']);
 Route::middleware('auth:api')->get('/reward/{user_id}/{subject_id}/{grade_id}', [BadgeController::class, 'rwardList']);
 //end badge
-
-Route::get('/users', function () {});

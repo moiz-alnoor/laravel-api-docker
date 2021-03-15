@@ -16,4 +16,12 @@ class UserController extends Controller
         if($user)
         return response()->json($user, 200);
     }
+    public function userId(Request $request, $user_id){
+
+        $user = User::find($user_id);
+        $user->player_id = $request->player_id;
+        $user->save();
+        if($user)
+        return response()->json($user, 200);
+    }
 }
