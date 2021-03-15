@@ -66,6 +66,9 @@ class StudentController extends Controller
         $book->status_id = $request->status_id;
         $book->grade_id = $request->grade_id;
         $book->save();
+
+        $this->notify();
+
         if ($book) {
             return response()->json($book, 201);
         }
@@ -79,5 +82,37 @@ class StudentController extends Controller
         }
 
     }
+    public function notify()
+    {
 
+        $content = array(
+            "en" => 'Tutme Notification :)',
+        );
+
+        $fields = array(
+            'app_id' => "b27ac1bf-f719-4b8b-a2c8-b8e01131a2df",
+            'include_player_ids' => array("8844bec0-c251-44c5-b852-d27f5687ca19", "76ece62b-bcfe-468c-8a78-839aeaa8c5fa", "8e0f21fa-9a5a-4ae7-a9a6-ca1f24294b86"),
+            // 'data' => array("foo" => "bar"),
+            'contents' => $content,
+        );
+
+        $fields = json_encode($fields);
+        //print("\nJSON sent:\n");
+        //print($fields);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+       // return $response;
+
+    }
 }

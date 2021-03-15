@@ -76,4 +76,6 @@ class StudyClassController extends Controller
         }
 
     }
+ 
+
 }

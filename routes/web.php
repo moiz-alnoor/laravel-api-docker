@@ -16,9 +16,9 @@ use App\Models\User;
  */
 
 // otp auth
-Route::get('/home', function () {
+Route::get('/', function () {
   return view('home');
-})->name('home');
+})->name('/');
 
 Route::get('/register', function () {
   return view('auth.register');

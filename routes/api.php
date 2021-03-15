@@ -96,6 +96,7 @@ Route::middleware('auth:api')->get('/about_location/{user_id}', [StudentControll
 Route::middleware('auth:api')->get('/student/teacher/{user_id}', [StudentController::class, 'studentTeacher']);
 Route::middleware('auth:api')->get('/student/review/{user_id}', [StudentController::class, 'studentReview']);
 Route::middleware('auth:api')->post('/student/booked_class', [StudentController::class, 'BookedClass']);
+Route::get('/student/booked_class_list', [StudentController::class, 'list']);
 //end student
 
 //badge

@@ -58,7 +58,7 @@ class BookedClass extends Model
 
     public function sendNotification()
     {
-        $this->notify(new ProductAdded($this)); //Pass the model data to the OneSignal Notificator
+        $this->notify(new BookedClass($this)); //Pass the model data to the OneSignal Notificator
     }
 
     public function routeNotificationForOneSignal()
@@ -68,7 +68,8 @@ class BookedClass extends Model
          * receive the message of if you want you can return
          * an array of players id
          */
-        return ['email' => 'mmoiz.aalnoor@gmail.com'];
+        return '8844bec0-c251-44c5-b852-d27f5687ca19';
+        //return ['email' => 'mmoiz.aalnoor@gmail.com'];
         //return $this->data->user_one_signal_id;
     }
 }
