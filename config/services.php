@@ -31,8 +31,8 @@ return [
     ],
 
     'onesignal' => [
-        'app_id' => env('b27ac1bf-f719-4b8b-a2c8-b8e01131a2df'),
-        'rest_api_key' => env('Njk5ZTIxNjYtNTA0Ny00ZDk1LWI4NmMtMGU1NTdlMjg1YTkz')
+        'app_id' => env('138c95d0-283e-40cb-a4da-c0f8a9108b33'),
+        'rest_api_key' => env('MWU2OTg1ZGEtNDJiNC00NDdkLTkwZmYtYjI3YmQ0M2Y2NWY4')
     ],
 
 ];

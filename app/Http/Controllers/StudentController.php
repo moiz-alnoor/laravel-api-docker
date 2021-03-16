@@ -67,7 +67,7 @@ class StudentController extends Controller
         /* get user player id*/
         $user = User::find($request->teacher_user_id);
         $playerId = $user->player_id;
-        
+
         /*call push method*/
         $this->notify($playerId);
 
