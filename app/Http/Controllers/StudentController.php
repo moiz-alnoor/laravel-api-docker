@@ -6,6 +6,7 @@ use App\Models\BookedClass;
 use App\Models\Student;
 use App\Models\TeacherLocationAvailability;
 use App\Models\TeacherTimeAvailability;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -19,7 +20,6 @@ class StudentController extends Controller
         if ($pickDate) {
             return response()->json($pickDate, 200);
         }
-
     }
     public function pickTime(Request $request, $date, $user_id)
     {
@@ -29,7 +29,6 @@ class StudentController extends Controller
         if ($pickTime) {
             return response()->json($pickTime, 200);
         }
-
     }
     public function aboutLocation(Request $request, $user_id)
     {
@@ -39,7 +38,6 @@ class StudentController extends Controller
         if ($aboutLocation) {
             return response()->json($aboutLocation, 200);
         }
-
     }
 
     public function studentTeacher(Request $request, $user_id)
@@ -53,7 +51,6 @@ class StudentController extends Controller
         if ($studentTeacher) {
             return response()->json($studentTeacher, 200);
         }
-
     }
     public function BookedClass(Request $request)
     {
@@ -67,31 +64,27 @@ class StudentController extends Controller
         $book->grade_id = $request->grade_id;
         $book->save();
 
-        $this->notify();
+        /* get user player id*/
+        $user = User::find($request->teacher_user_id);
+        $playerId = $user->player_id;
+        
+        /*call push method*/
+        $this->notify($playerId);
 
         if ($book) {
             return response()->json($book, 201);
         }
-
     }
-    public function studentReview(Request $request, $user_id)
-    {
-        $teacherReview = Student::with(['review'])->where('users.id', $user_id)->get();
-        if ($teacherReview) {
-            return response()->json($teacherReview, 200);
-        }
 
-    }
-    public function notify()
+    public function notify($playerId)
     {
-
         $content = array(
             "en" => 'Tutme Notification :)',
         );
 
         $fields = array(
             'app_id' => "b27ac1bf-f719-4b8b-a2c8-b8e01131a2df",
-            'include_player_ids' => array("8844bec0-c251-44c5-b852-d27f5687ca19"),
+            'include_player_ids' => array($playerId),
             // 'data' => array("foo" => "bar"),
             'contents' => $content,
         );
@@ -112,7 +105,15 @@ class StudentController extends Controller
         $response = curl_exec($ch);
         curl_close($ch);
 
-       // return $response;
+        // return $response;
 
+    }
+
+    public function studentReview(Request $request, $user_id)
+    {
+        $teacherReview = Student::with(['review'])->where('users.id', $user_id)->get();
+        if ($teacherReview) {
+            return response()->json($teacherReview, 200);
+        }
     }
 }
