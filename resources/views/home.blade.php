@@ -15,11 +15,29 @@
 
 
 
-            <form action="http://127.0.0.1:8080/api/student/booked_class_list" method="get">
-                  <input type="submit">
-            </form>
 
-
+            <form method="post" enctype="multipart/form-data" id="upload-file" action="http://127.0.0.1:8080/api/user/setting">
+                 
+                 <div class="row">
+        
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <input type="text" name="name">
+                             <input type="file" name="file">
+                         </div>
+                     </div>
+                     <div class="col-md-12">
+                         <div class="form-group">
+                             <input type="hidden" name="user_id" value="783941393">
+                         </div>
+                     </div>
+                        
+                     <div class="col-md-12">
+                         <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                     </div>
+                 </div>     
+             </form>
+   
 
 
     </body>
