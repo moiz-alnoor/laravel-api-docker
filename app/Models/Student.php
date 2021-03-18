@@ -35,11 +35,10 @@ class Student extends Model
     {
         return $this->belongsTo(Charge::class, 'id', 'user_id');
     }
-    public function review()
+    public function studentReview()
     {
-        return $this->belongsTo(Review::class, 'id', 'student_user_id');
+        return $this->hasMany(Review::class,'student_user_id' ,'id');
     }
-
     public function student()
     {
         return $this->belongsTo(User::class, 'student_phone_numbers', 'phone_number');

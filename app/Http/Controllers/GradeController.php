@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class GradeController extends Controller
 {
-    public function read(){
+    public function list(){
         $grade = Grade::all();
         if($grade)
         return response()->json($grade, 200);

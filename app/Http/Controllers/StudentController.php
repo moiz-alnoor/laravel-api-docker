@@ -12,10 +12,10 @@ use Illuminate\Http\Request;
 class StudentController extends Controller
 {
 
-    public function pickDate(Request $request, $user_id)
+    public function pickDate(Request $request, $teacher_user_id)
     {
         // pick suitable time to studey
-        $pickDate = TeacherTimeAvailability::where('user_id', $user_id)
+        $pickDate = TeacherTimeAvailability::where('user_id', $teacher_user_id)
             ->get(['teacher_time_availability.date']);
         if ($pickDate) {
             return response()->json($pickDate, 200);
@@ -40,12 +40,13 @@ class StudentController extends Controller
         }
     }
 
-    public function studentTeacher(Request $request, $user_id)
+    public function studentTeacher(Request $request)
     {
         // getting all teachers of this student
+           $user = auth()->user();
         $studentTeacher = BookedClass::leftJoin('users', 'users.id', '=', 'booked_class.teacher_user_id')
-            ->leftJoin('dialog', 'dialog.teacher_user_id', '=', 'booked_class.teacher_user_id')
-            ->where('booked_class.student_user_id', $user_id)
+            ->leftJoin('dialog', 'dialog.user_id', '=', 'booked_class.teacher_user_id')
+            ->where('booked_class.student_user_id', $user->id)
             ->distinct()
             ->get(['users.name', 'users.image_location', 'users.user_type', 'dialog.message', 'dialog.date']);
         if ($studentTeacher) {
@@ -54,8 +55,9 @@ class StudentController extends Controller
     }
     public function BookedClass(Request $request)
     {
+        $user = auth()->user();
         $book = new BookedClass();
-        $book->student_user_id = $request->student_user_id;
+        $book->student_user_id = $user->id;
         $book->teacher_user_id = $request->teacher_user_id;
         $book->teacher_location_availability_id = $request->teacher_location_availability_id;
         $book->teacher_time_availability_id = $request->teacher_time_availability_id;
@@ -109,9 +111,10 @@ class StudentController extends Controller
 
     }
 
-    public function studentReview(Request $request, $user_id)
+    public function studentReview(Request $request)
     {
-        $teacherReview = Student::with(['review'])->where('users.id', $user_id)->get();
+             $user = auth()->user();
+        $teacherReview = Student::with(['studentReview'])->where('users.id',  $user->id)->get();
         if ($teacherReview) {
             return response()->json($teacherReview, 200);
         }
