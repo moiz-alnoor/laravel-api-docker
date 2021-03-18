@@ -14,12 +14,12 @@ class TeacherController extends Controller
 {
     public function timeAvailability(Request $request)
     {
-        // set time available
+        $user = auth()->user();
         $teacher = new TeacherTimeAvailability();
         $teacher->from = $request->from;
         $teacher->to = $request->to;
         $teacher->date = $request->date;
-        $teacher->user_id = $request->user_id;
+        $teacher->user_id = $user->id;
         $teacher->save();
         if ($teacher) {
             return response()->json($teacher, 201);
@@ -43,9 +43,9 @@ class TeacherController extends Controller
 
     public function charge(Request $request)
     {
-        // teacher charge per hour
+        $user = auth()->user();
         $teacher = new Charge();
-        $teacher->user_id = $request->user_id;
+        $teacher->user_id = $user->id;
         $teacher->amount = $request->amount;
         $teacher->save();
         if ($teacher) {
@@ -76,10 +76,12 @@ class TeacherController extends Controller
 
     }
 
-    public function teacher(Request $request, $user_id)
+    public function teacher(Request $request)
     {
         // getting teacher profile
-        $choseTeacher = Teacher::with(['charge'])->where('users.id', $user_id)->get();
+          $user = auth()->user();
+
+        $choseTeacher = Teacher::with(['charge','review'])->where('users.id', $user->id)->get();
         if ($choseTeacher) {
             return response()->json($choseTeacher, 200);
         }
@@ -96,12 +98,13 @@ class TeacherController extends Controller
             ->get(['users.phone_number', 'users.name', 'users.user_type', 'dialog.message', 'dialog.date']);
         if ($choseTeacher) {
             return response()->json($choseTeacher, 200);
-        }
+        }   
 
     }
-    public function teacherReview(Request $request, $user_id)
-    {
-        $teacherReview = Teacher::with(['review', 'charge'])->where('users.id', $user_id)->get();
+    public function teacherReview(Request $request)
+    {     
+        $user = auth()->user();
+        $teacherReview = Teacher::with(['review', 'charge'])->where('users.id', $user->id)->get();
         if ($teacherReview) {
             return response()->json($teacherReview, 200);
         }

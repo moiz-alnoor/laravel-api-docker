@@ -41,8 +41,9 @@ class SubjectController extends Controller
         return response()->json(null, 204);
     }
     public function selectSubject(Request $request){
+         $user = auth()->user();
         $subject = new SelectSubject();
-        $subject->user_id = '+'.$request->user_id;
+        $subject->user_id = $user->id;
         $subject->subject_id = $request->subject_id;
         $subject->grade_id = $request->grade_id;
         $subject->save();

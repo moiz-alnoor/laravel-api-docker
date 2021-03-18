@@ -12,6 +12,6 @@ class Dialog extends Model
     public $timestamps = false;
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id' ,'message', 'date', 'time','booked_class_id'
+    'id', 'subject_id', 'grade_id', 'user_id', 'message', 'date'
     ];
 }

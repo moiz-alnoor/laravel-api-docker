@@ -33,7 +33,7 @@ class BookedClass extends Model
     }
     public function location()
     {
-        return $this->belongsTo(TeacherLocationAvailability::class, 'teacher_location_availability_id', 'user_id');
+        return $this->belongsTo(TeacherLocationAvailability::class, 'teacher_location_availability_id', 'id');
     }
     public function subject()
     {
@@ -41,7 +41,7 @@ class BookedClass extends Model
     }
     public function time()
     {
-        return $this->belongsTo(TeacherTimeAvailability::class, 'teacher_time_availability_id', 'user_id');
+        return $this->belongsTo(TeacherTimeAvailability::class, 'teacher_time_availability_id', 'id');
     }
     public function teacher()
     {

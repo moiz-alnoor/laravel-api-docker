@@ -42,7 +42,7 @@ class Teacher extends Model
     }
     public function review()
     {
-        return $this->belongsTo(Review::class, 'id', 'teacher_user_id');
+        return $this->hasMany(Review::class,'teacher_user_id');
     }
 
 }

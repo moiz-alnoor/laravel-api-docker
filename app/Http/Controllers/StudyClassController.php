@@ -52,7 +52,7 @@ class StudyClassController extends Controller
     public function bookedClass(Request $request, $booked_class_id)
     {
         //getting one  class with details
-        $pendingClass = BookedClass::with(['status', 'subject', 'location', 'time', 'teacher', 'charge', 'dialog'])
+        $pendingClass = BookedClass::with(['status', 'subject', 'location', 'time', 'teacher'])
             ->where('booked_class.id', $booked_class_id)
             ->get();
         if ($pendingClass) {
