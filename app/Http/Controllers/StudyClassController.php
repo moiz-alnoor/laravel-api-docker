@@ -12,12 +12,13 @@ class StudyClassController extends Controller
     private $approvd = 2;
     private $complete = 3;
 
-    public function complete(Request $request, $user_id)
+    public function complete(Request $request)
     {
         //getting pastClass  class for student
+                 $user = auth()->user();
         $pastClass = BookedClass::with(['status', 'subject', 'location', 'time', 'teacher', 'charge'])
             ->where('booked_class.status_id', $this->complete)
-            ->where('booked_class.student_user_id', $user_id)
+            ->where('booked_class.student_user_id', $user->id)
             ->get();
         if ($pastClass) {
             return response()->json($pastClass, 200);
@@ -25,11 +26,13 @@ class StudyClassController extends Controller
 
     }
 
-    public function pending(Request $request, $user_id)
+    public function pending(Request $request)
     {
         //getting pastClass  class for student
+           $user = auth()->user();
+
         $pendingClass = BookedClass::with(['status', 'subject', 'location', 'time', 'teacher', 'charge'])
-            ->where('booked_class.student_user_id', $user_id)
+            ->where('booked_class.student_user_id', $user->id)
             ->where('booked_class.status_id', $this->pending)
             ->get();
         if ($pendingClass) {
@@ -37,11 +40,12 @@ class StudyClassController extends Controller
         }
 
     }
-    public function approved(Request $request, $user_id)
+    public function approved(Request $request)
     {
         //getting pastClass  class for student
+                 $user = auth()->user();
         $approvedClass = BookedClass::with(['status', 'subject', 'location', 'time', 'teacher', 'charge'])
-            ->where('booked_class.student_user_id', $user_id)
+            ->where('booked_class.student_user_id', $user->id)
             ->where('booked_class.status_id', $this->approvd)
             ->get();
         if ($approvedClass) {

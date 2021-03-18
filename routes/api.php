@@ -72,9 +72,9 @@ Route::middleware('auth:api')->get('teacher/student/class_group/{user_id}/{subje
 /* end teacher */
 
 /* class */
-Route::middleware('auth:api')->get('/class/pending/{user_id}',  [StudyClassController::class, 'pending']);
-Route::middleware('auth:api')->get('/class/approved/{user_id}', [StudyClassController::class, 'approved']);
-Route::middleware('auth:api')->get('/class/complete/{user_id}', [StudyClassController::class, 'complete']);
+Route::middleware('auth:api')->get('/class/pending',  [StudyClassController::class, 'pending']);
+Route::middleware('auth:api')->get('/class/approved', [StudyClassController::class, 'approved']);
+Route::middleware('auth:api')->get('/class/complete', [StudyClassController::class, 'complete']);
 // class date, location, time
 Route::middleware('auth:api')->get('/class/{subject_id}/{grade_id}', [StudyClassController::class, 'class']);
 /* end class */
