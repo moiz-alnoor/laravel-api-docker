@@ -44,5 +44,9 @@ class Teacher extends Model
     {
         return $this->hasMany(Review::class,'teacher_user_id');
     }
+    public function dialog()
+    {
+        return $this->hasMany(Dialog::class,'user_id');
+    }
 
 }

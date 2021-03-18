@@ -49,12 +49,19 @@ class StudyClassController extends Controller
         }
 
     }
-    public function bookedClass(Request $request, $booked_class_id)
+    public function class(Request $request, $subject_id,$grade_id)
     {
         //getting one  class with details
-        $pendingClass = BookedClass::with(['status', 'subject', 'location', 'time', 'teacher'])
-            ->where('booked_class.id', $booked_class_id)
-            ->get();
+               $user = auth()->user();
+        $pendingClass = BookedClass::leftJoin('teacher_location_availability', 'teacher_location_availability.id','=',
+            'booked_class.teacher_location_availability_id')
+        ->leftJoin('subject', 'subject.id','=','booked_class.subject_id')
+          ->leftJoin('teacher_time_availability', 'teacher_time_availability.id','=','booked_class.teacher_location_availability_id')
+            ->where('booked_class.teacher_user_id', $user->id)
+                        ->where('booked_class.subject_id', $subject_id)
+                                    ->where('booked_class.grade_id', $grade_id)
+                                    ->distinct()
+            ->get(['longitude','latitude','subject','from','to','date']);
         if ($pendingClass) {
             return response()->json($pendingClass, 200);
         }

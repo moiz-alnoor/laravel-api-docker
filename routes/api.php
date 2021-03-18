@@ -65,7 +65,7 @@ Route::middleware('auth:api')->post('/teacher_location_availability', [TeacherCo
 Route::middleware('auth:api')->post('/charge_per_hour', [TeacherController::class, 'charge']);
 Route::middleware('auth:api')->get('/chose_teacher/{subject_id}/{grade_id}', [TeacherController::class, 'choseTeacher']);
 Route::middleware('auth:api')->get('/teacher', [TeacherController::class, 'teacher']);
-Route::middleware('auth:api')->get('/teacher/student/{user_id}', [TeacherController::class, 'teacherStudent']);
+Route::middleware('auth:api')->get('/teacher/student', [TeacherController::class, 'teacherStudent']);
 Route::get('/teacher_review', [TeacherController::class, 'teacherReview']);
 Route::get('/teacher/notification/{user_id}', [TeacherController::class, 'teacherNotification']);
 Route::middleware('auth:api')->get('teacher/student/class_group/{user_id}/{subject_id}/{grade_id}', [StudyClassController::class, 'classGroup']);
@@ -75,7 +75,8 @@ Route::middleware('auth:api')->get('teacher/student/class_group/{user_id}/{subje
 Route::middleware('auth:api')->get('/class/pending/{user_id}',  [StudyClassController::class, 'pending']);
 Route::middleware('auth:api')->get('/class/approved/{user_id}', [StudyClassController::class, 'approved']);
 Route::middleware('auth:api')->get('/class/complete/{user_id}', [StudyClassController::class, 'complete']);
-Route::middleware('auth:api')->get('/class/{booked_class_id}', [StudyClassController::class, 'bookedClass']);
+// class date, location, time
+Route::middleware('auth:api')->get('/class/{subject_id}/{grade_id}', [StudyClassController::class, 'class']);
 /* end class */
 
 /* grade */
@@ -101,8 +102,8 @@ Route::get('/student/booked_class_list', [StudentController::class, 'list']);
 /* badge */
 Route::middleware('auth:api')->post('/requirement', [BadgeController::class, 'newRequirement']);
 Route::middleware('auth:api')->get('/requirement', [BadgeController::class, 'requirementList']);
-Route::middleware('auth:api')->get('/badge/{user_id}', [BadgeController::class, 'badgeList']);
-Route::middleware('auth:api')->get('/reward/{user_id}/{subject_id}/{grade_id}', [BadgeController::class, 'rwardList']);
+Route::middleware('auth:api')->get('/badge', [BadgeController::class, 'badgeList']);
+Route::middleware('auth:api')->get('/reward/{subject_id}/{grade_id}', [BadgeController::class, 'rwardList']);
 /* end badge */
 
 Route::middleware('auth:api')->get('/assa', function () {

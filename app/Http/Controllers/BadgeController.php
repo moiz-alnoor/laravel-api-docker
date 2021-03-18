@@ -15,13 +15,14 @@ class BadgeController extends Controller
     private $approvd = 2;
     private $complete = 3;
 
-    public function badgeList(Request $request, $user_id)
+    public function badgeList(Request $request)
     {
+          $user = auth()->user();
         $badge = SelectSubject::leftJoin('subject', 'subject.id', '=', 'select_subject.subject_id')
             ->leftJoin('grade', 'grade.id', '=', 'select_subject.grade_id')
             ->distinct()
-            ->where('user_id', $user_id)
-            ->get();
+            ->where('user_id', $user->id)
+            ->get(['subject','grade']);
         if ($badge) {
             return response()->json($badge, 200);
         }
@@ -48,17 +49,19 @@ class BadgeController extends Controller
 
     }
 
-    public function rwardList(Request $request, $user_id, $subject_id, $grade_id)
+    public function rwardList(Request $request, $subject_id, $grade_id)
     {
-        $completeClass = BookedClass::where('student_user_id', $user_id)
+
+         $user = auth()->user();
+        $completeClass = BookedClass::where('student_user_id', $user->id)
             ->where('status_id', $this->complete)
             ->where('subject_id', $subject_id)
             ->where('grade_id', $grade_id)
             ->get();
 
-        $comment = Review::where('teacher_user_id', $user_id)->get();
+        $comment = Review::where('teacher_user_id', $user->id)->get();
 
-        $review = Review::where('teacher_user_id', '=', $user_id)->get();
+        $review = Review::where('teacher_user_id', '=', $user->id)->get();
 
         $completeClassNumber = count($completeClass);
         $commentNumber = count($comment);

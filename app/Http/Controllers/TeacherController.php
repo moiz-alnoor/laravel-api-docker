@@ -30,8 +30,9 @@ class TeacherController extends Controller
     public function locationAvailability(Request $request)
     {
         // set date available
+        $user = auth()->user();
         $loaction = new TeacherLocationAvailability();
-        $loaction->user_id = $request->user_id;
+        $loaction->user_id = $user->id;
         $loaction->longitude = $request->longitude;
         $loaction->latitude = $request->latitude;
         $loaction->save();
@@ -88,14 +89,15 @@ class TeacherController extends Controller
 
     }
 
-    public function teacherStudent(Request $request, $user_id)
+    public function teacherStudent(Request $request)
     {
         // getting teacher based chosen subject and grade
-        $choseTeacher = BookedClass::leftJoin('users', 'users.id', '=', 'booked_class.student_user_id')
-            ->leftJoin('dialog', 'dialog.booked_class_id', '=', 'booked_class.id')
-            ->where('booked_class.teacher_user_id', $user_id)
-            ->distinct()
-            ->get(['users.phone_number', 'users.name', 'users.user_type', 'dialog.message', 'dialog.date']);
+           $user = auth()->user();
+        $choseTeacher = BookedClass::leftJoin('users', 'users.id','=','booked_class.student_user_id')
+                              ->leftJoin('dialog', 'dialog.user_id','=','booked_class.student_user_id')
+           ->where('booked_class.teacher_user_id', $user->id)
+        ->distinct()
+        ->get(['users.image_location','users.name','dialog.message','dialog.date']);
         if ($choseTeacher) {
             return response()->json($choseTeacher, 200);
         }   

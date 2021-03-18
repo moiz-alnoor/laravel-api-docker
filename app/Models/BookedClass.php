@@ -19,10 +19,7 @@ class BookedClass extends Model
         'id', 'student_user_id', 'teacher_user_id', 'teacher_location_availability_id', 'teacher_time_availability_id', 'subject_id', 'status_id', 'grade_id',
     ];
 
-    public function dialog()
-    {
-        return $this->belongsTo(Dialog::class, 'id', 'booked_class_id');
-    }
+ 
     public function student()
     {
         return $this->belongsTo(User::class, 'student_user_id', 'id');
@@ -47,14 +44,16 @@ class BookedClass extends Model
     {
         return $this->belongsTo(User::class, 'teacher_user_id', 'id');
     }
-    public function review()
-    {
-        return $this->belongsTo(Review::class, 'teacher_user_id', 'teacher_user_id');
-    }
+ 
     public function charge()
     {
         return $this->belongsTo(Charge::class, 'teacher_user_id', 'user_id');
     }
+    public function studentDialog()
+    {
+        return $this->hasMany(Dialog::class,'user_id', 'student_user_id');
+    }
+
 
     public function sendNotification()
     {
