@@ -45,9 +45,14 @@ Route::group([
 /* end user auth */
 
 /* user */
-Route::middleware('auth:api')->post('/user/type', [UserController::class, 'userType']);
-Route::middleware('auth:api')->put('/user/player_id/', [UserController::class, 'setPlayerId']);
-Route::post('/user/setting', [UserController::class, 'setting']);
+// set user type
+Route::middleware('auth:api')->put('/user/type/{user_type_id}', [UserController::class, 'userType']);
+//set player id
+Route::middleware('auth:api')->put('/user/{player_id}', [UserController::class, 'setPlayerId']);
+//edit user
+Route::put('/user/edit/{user_type_id}', [UserController::class, 'userEdit']);
+// get user
+Route::get('/user/{user_type_id}', [UserController::class, 'read']);
 /* end user*/
 
 /* subject */
