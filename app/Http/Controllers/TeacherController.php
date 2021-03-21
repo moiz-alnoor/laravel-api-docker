@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\BookedClass;
 use App\Models\Charge;
 use App\Models\SelectSubject;
 use App\Models\Teacher;
+use App\Models\Review;
 use App\Models\TeacherLocationAvailability;
 use App\Models\TeacherTimeAvailability;
-use Illuminate\Http\Request;
+
 
 class TeacherController extends Controller
 {
@@ -16,7 +18,7 @@ class TeacherController extends Controller
     {
         $user = auth()->user();
         $teacher = new TeacherTimeAvailability();
-        $teacher->from = $request->from;
+        $teacher->from =  date("H:i A");
         $teacher->to = $request->to;
         $teacher->date = $request->date;
         $teacher->user_id = $user->id;
@@ -80,11 +82,18 @@ class TeacherController extends Controller
     public function teacher(Request $request)
     {
         // getting teacher profile
-          $user = auth()->user();
-
-        $choseTeacher = Teacher::with(['charge','review'])->where('users.id', $user->id)->get();
-        if ($choseTeacher) {
-            return response()->json($choseTeacher, 200);
+        $user = auth()->user();
+        $ratingSum = Review::where('teacher_user_id',  $user->id)->sum('rating');
+        $count = Review::where('teacher_user_id',  $user->id)->count();
+        $teacher = Teacher::leftJoin('charge', 'charge.user_id','=','users.id')
+        ->where('users.id',  $user->id)
+        ->distinct()
+        ->get(['name','image_location','amount']);
+       if ($teacher) {
+               return response()->json([
+                'teacher' => $teacher,
+                'calculatedRating' =>  $ratingSum/$count,
+            ], 201);
         }
 
     }
@@ -106,9 +115,9 @@ class TeacherController extends Controller
     public function teacherReview(Request $request)
     {     
         $user = auth()->user();
-        $teacherReview = Teacher::with(['review', 'charge'])->where('users.id', $user->id)->get();
+        $teacherReview = Teacher::with(['review'])->where('users.id', $user->id)->get();
         if ($teacherReview) {
-            return response()->json($teacherReview, 200);
+               return response()->json($teacherReview,201);
         }
 
     }

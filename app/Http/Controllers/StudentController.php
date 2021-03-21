@@ -12,28 +12,27 @@ use Illuminate\Http\Request;
 class StudentController extends Controller
 {
 
-    public function pickDate(Request $request, $teacher_user_id)
+    public function pickDate(Request $request, $teacher_id)
     {
         // pick suitable time to studey
-        $pickDate = TeacherTimeAvailability::where('user_id', $teacher_user_id)
+        $pickDate = TeacherTimeAvailability::where('user_id', $teacher_id)
             ->get(['teacher_time_availability.date']);
         if ($pickDate) {
             return response()->json($pickDate, 200);
         }
     }
-    public function pickTime(Request $request, $date, $user_id)
+    public function pickTime(Request $request, $date, $teacher_id)
     {
         // pick suitable time to studey
-        $pickTime = TeacherTimeAvailability::where('user_id', $user_id)->where('date', $date)
-            ->get();
+        $pickTime = TeacherTimeAvailability::where('user_id', $teacher_id)->where('date', $date)->get();
         if ($pickTime) {
             return response()->json($pickTime, 200);
         }
     }
-    public function aboutLocation(Request $request, $user_id)
+    public function aboutLocation(Request $request, $teacher_id)
     {
         // pick suitable time to studey
-        $aboutLocation = TeacherLocationAvailability::where('user_id', $user_id)
+        $aboutLocation = TeacherLocationAvailability::where('user_id', $teacher_id)
             ->get();
         if ($aboutLocation) {
             return response()->json($aboutLocation, 200);

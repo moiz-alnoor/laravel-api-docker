@@ -72,13 +72,13 @@ class StudyClassController extends Controller
 
     }
 
-    public function classGroup(Request $request, $user_id, $subject_id, $grade_id)
-    {
+    public function classGroup(Request $request, $subject_id, $grade_id)
+    {     $user = auth()->user();
 
         $classGroup = BookedClass::leftJoin('users', 'users.id', '=', 'booked_class.student_user_id')
             ->leftJoin('dialog', 'dialog.user_id', '=', 'booked_class.student_user_id')
             ->where('booked_class.subject_id', $subject_id)
-            ->where('booked_class.teacher_user_id', $user_id)
+            ->where('booked_class.teacher_user_id', $user->id)
             ->where('booked_class.grade_id', $grade_id)
             ->distinct()
             ->get(['users.name', 'users.image_location', 'dialog.message', 'dialog.date']);

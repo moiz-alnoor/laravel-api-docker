@@ -21,13 +21,13 @@ class DialogController extends Controller
         }
 
     }
-    public function dialog(Request $request, $teacher_user_id, $subject_id, $grade_id)
+    public function classDialog(Request $request, $teacher_id, $subject_id, $grade_id)
     {
 
         $pendingClass = Dialog::join('users', 'users.id', '=', 'dialog.user_id')
             ->where('dialog.subject_id', $subject_id)
             ->where('dialog.grade_id', $grade_id)
-            ->where('dialog.user_id', $teacher_user_id)
+            ->where('dialog.user_id', $teacher_id)
             ->get(['users.user_type', 'users.image_location', 'dialog.message']);
         if ($pendingClass) {
             return response()->json($pendingClass, 200);

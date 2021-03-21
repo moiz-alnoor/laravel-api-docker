@@ -60,15 +60,15 @@ Route::middleware('auth:api')->post('/select_your_subject', [SubjectController::
 /* end subject */
 
 /* teacher */
-Route::middleware('auth:api')->post('/teacher_time_availability', [TeacherController::class, 'timeAvailability']);
-Route::middleware('auth:api')->post('/teacher_location_availability', [TeacherController::class, 'locationAvailability']);
-Route::middleware('auth:api')->post('/charge_per_hour', [TeacherController::class, 'charge']);
+Route::middleware('auth:api')->post('/teacher/time_availability', [TeacherController::class, 'timeAvailability']);
+Route::middleware('auth:api')->post('/teacher/location_availability', [TeacherController::class, 'locationAvailability']);
+Route::middleware('auth:api')->post('/teacher/charge', [TeacherController::class, 'charge']);
 Route::middleware('auth:api')->get('/chose_teacher/{subject_id}/{grade_id}', [TeacherController::class, 'choseTeacher']);
 Route::middleware('auth:api')->get('/teacher', [TeacherController::class, 'teacher']);
 Route::middleware('auth:api')->get('/teacher/student', [TeacherController::class, 'teacherStudent']);
-Route::get('/teacher_review', [TeacherController::class, 'teacherReview']);
+Route::get('/teacher/review', [TeacherController::class, 'teacherReview']);
 Route::get('/teacher/notification/{user_id}', [TeacherController::class, 'teacherNotification']);
-Route::middleware('auth:api')->get('teacher/student/class_group/{user_id}/{subject_id}/{grade_id}', [StudyClassController::class, 'classGroup']);
+Route::middleware('auth:api')->get('teacher/student/same_class/{subject_id}/{grade_id}', [StudyClassController::class, 'classGroup']);
 /* end teacher */
 
 /* class */
@@ -86,15 +86,15 @@ Route::middleware('auth:api')->get('/chose_grade/{subject_id}', [GradeController
 
 /* dialog */
 Route::middleware('auth:api')->post('/dialog', [DialogController::class, 'create']);
-Route::middleware('auth:api')->get('class/dialog/{teacher_user_id}/{subject_id}/{grade_id}', [DialogController::class, 'dialog']);
+Route::middleware('auth:api')->get('class/dialog/{teacher_id}/{subject_id}/{grade_id}', [DialogController::class, 'classDialog']);
 /* end dialog */
 
 /* student */
-Route::middleware('auth:api')->get('/pick_date/{user_id}', [StudentController::class, 'pickDate']);
-Route::middleware('auth:api')->get('/pick_time/{date}/{user_id}', [StudentController::class, 'pickTime']);
-Route::middleware('auth:api')->get('/about_location/{user_id}', [StudentController::class, 'aboutLocation']);
+Route::middleware('auth:api')->get('/pick_date/{teacher_id}', [StudentController::class, 'pickDate']);
+Route::middleware('auth:api')->get('/pick_time/{date}/{teacher_id}', [StudentController::class, 'pickTime']);
+Route::middleware('auth:api')->get('/about_location/{teacher_id}', [StudentController::class, 'aboutLocation']);
 Route::middleware('auth:api')->get('/student/teacher', [StudentController::class, 'studentTeacher']);
-Route::middleware('auth:api')->get('/student_review', [StudentController::class, 'studentReview']);
+Route::middleware('auth:api')->get('/student/review', [StudentController::class, 'studentReview']);
 Route::middleware('auth:api')->post('/student/booked_class', [StudentController::class, 'BookedClass']);
 Route::get('/student/booked_class_list', [StudentController::class, 'list']);
 /* end student */

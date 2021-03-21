@@ -22,8 +22,7 @@ class UserController extends Controller
     public function setPlayerId(Request $request)
     {
 
-       $user = auth()->user();
-       //return $user->id;
+        $user = auth()->user();
         $user = User::find($user->id);
         $user->player_id = $request->player_id;
         $user->save();
