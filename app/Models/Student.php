@@ -15,8 +15,7 @@ class Student extends Model
         'id','player_id', 'name', 'phone_number', 'password', 'user_type', 'image_location', 'is_verified', 'remember_token', 'created_at', 'updated_at', 'deleted_at'
     ];
   protected $hidden = [
-        'password',
-        'remember_token',
+     'password','remember_token','created_at', 'updated_at', 'deleted_at'
     ];
 
    /*
