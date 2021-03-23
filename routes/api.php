@@ -48,11 +48,11 @@ Route::group([
 // set user type
 Route::middleware('auth:api')->put('/user/type/{user_type_id}', [UserController::class, 'userType']);
 //set player id
-Route::middleware('auth:api')->put('/user/{player_id}', [UserController::class, 'setPlayerId']);
+Route::middleware('auth:api')->put('/user/player_id/{player_id}', [UserController::class, 'setPlayerId']);
 //edit user
-Route::put('/user/edit/{user_type_id}', [UserController::class, 'userEdit']);
+Route::middleware('auth:api')->put('/user/edit/{user_type_id}', [UserController::class, 'userEdit']);
 // get user
-Route::get('/user/{user_type_id}', [UserController::class, 'read']);
+Route::middleware('auth:api')->get('/user', [UserController::class, 'read']);
 /* end user*/
 
 /* subject */
@@ -71,8 +71,8 @@ Route::middleware('auth:api')->post('/teacher/charge', [TeacherController::class
 Route::middleware('auth:api')->get('/chose_teacher/{subject_id}/{grade_id}', [TeacherController::class, 'choseTeacher']);
 Route::middleware('auth:api')->get('/teacher', [TeacherController::class, 'teacher']);
 Route::middleware('auth:api')->get('/teacher/student', [TeacherController::class, 'teacherStudent']);
-Route::get('/teacher/review', [TeacherController::class, 'teacherReview']);
-Route::get('/teacher/notification/{user_id}', [TeacherController::class, 'teacherNotification']);
+Route::middleware('auth:api')->get('/teacher/review', [TeacherController::class, 'teacherReview']);
+Route::middleware('auth:api')->get('/teacher/notification/{user_id}', [TeacherController::class, 'teacherNotification']);
 Route::middleware('auth:api')->get('teacher/student/same_class/{subject_id}/{grade_id}', [StudyClassController::class, 'classGroup']);
 /* end teacher */
 
@@ -91,7 +91,7 @@ Route::middleware('auth:api')->get('/chose_grade/{subject_id}', [GradeController
 
 /* dialog */
 Route::middleware('auth:api')->post('/dialog', [DialogController::class, 'create']);
-Route::middleware('auth:api')->get('class/dialog/{teacher_id}/{subject_id}/{grade_id}', [DialogController::class, 'classDialog']);
+Route::middleware('auth:api')->get('/class/dialog/{teacher_id}/{subject_id}/{grade_id}', [DialogController::class, 'classDialog']);
 /* end dialog */
 
 /* student */
@@ -101,7 +101,7 @@ Route::middleware('auth:api')->get('/about_location/{teacher_id}', [StudentContr
 Route::middleware('auth:api')->get('/student/teacher', [StudentController::class, 'studentTeacher']);
 Route::middleware('auth:api')->get('/student/review', [StudentController::class, 'studentReview']);
 Route::middleware('auth:api')->post('/student/booked_class', [StudentController::class, 'BookedClass']);
-Route::get('/student/booked_class_list', [StudentController::class, 'list']);
+Route::middleware('auth:api')->get('/student/booked_class_list', [StudentController::class, 'list']);
 /* end student */
 
 /* badge */

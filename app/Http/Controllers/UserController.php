@@ -18,8 +18,10 @@ class UserController extends Controller
         $userType->save();
         if ($userType) {
             return response()->json($userType, 200);
-        }
+        }  
+
     }
+
     public function setPlayerId(Request $request, $player_id)
     {
 
@@ -43,14 +45,12 @@ class UserController extends Controller
             if ($request->hasFile('file')) {
                 //delete and store
                 Storage::delete($user->image_location);
-                $path = $request->file('file')->store('user_img');
-
+                $request->file('file')->store('user_img');
                 //update user 
                 $user->name = $request->name;
                 $user->image_location = $path;
                 $user->save();
             } else {
-
                 //update user 
                 $user->name = $request->name;
                 $user->save();
@@ -60,13 +60,12 @@ class UserController extends Controller
             }
         }
 
+
+
         if ($user_type_id == 2) {
             //find user
             $user = User::find($user->id);
-
-
             if ($request->hasFile('file')) {
-
 
                 //delete and store
                 Storage::delete($user->image_location);
@@ -87,27 +86,22 @@ class UserController extends Controller
                 $charge = Charge::where('user_id', $user->id)->update(['amount' => $request->amount]);
             }
 
-
             if ($charge and $user) {
                 return response()->json($user, $charge, 200);
-            }
+            }  
+
         }
     }
-    public function read(Request $request, $user_type_id)
+    public function read(Request $request)
     {
         $user = auth()->user();
-        if ($user_type_id == 1) {
-
-            $user = User::find($user->id);
-            if ($user) {
+             $user = User::find($user->id);
+        if ($user->user_type == 1) {
                 return response()->json($user, 200);
             }
-        } else {
+        else {
             $user = User::with(['charge'])->where('users.id', $user->id)->get();
+               return response()->json($user, 200);
         }
-
-        if ($user) {
-            return response()->json($user, 200);
-        }
-    }
+   }
 }
