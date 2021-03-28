@@ -85,15 +85,20 @@ class TeacherController extends Controller
         $user = auth()->user();
         $ratingSum = Review::where('teacher_user_id',  $user->id)->sum('rating');
         $count = Review::where('teacher_user_id',  $user->id)->count();
+
         $teacher = Teacher::leftJoin('charge', 'charge.user_id','=','users.id')
         ->where('users.id',  $user->id)
         ->distinct()
         ->get(['name','image_location','amount']);
-       if ($teacher) {
+       if ($ratingSum > 0 &&  $count > 0) {
                return response()->json([
-                'teacher' => $teacher,
-                'calculatedRating' =>  $ratingSum/$count,
+                'teacherInfo' => $teacher, 'teacherRating' =>  ($ratingSum/$count),
             ], 201);
+        } else {
+               return response()->json([
+                'teacherInfo' => $teacher,
+                'teacherRating' =>  0,
+            ], 201); 
         }
 
     }
